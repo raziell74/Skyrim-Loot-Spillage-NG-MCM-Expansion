@@ -37,7 +37,7 @@ The MCM expansion adds additional control settings for item shaders.
 
 You can now configure the shader colors for each item type. The default colors are the same as the original Loot Spillage mod.
 
-I plan to add 2 new shader colors for Unique and Legendary items. These will be applied using keywords applied with [KID](https://www.nexusmods.com/skyrimspecialedition/mods/55728).
+I plan to add 2 new shader colors for Unique and Legendary items. These colors will be assigned using keywords applied through [KID](https://www.nexusmods.com/skyrimspecialedition/mods/55728).
 
 ![LootSpillage Shader Colors](https://raw.githubusercontent.com/raziell74/Skyrim-Loot-Spillage-NG-MCM-Expansion/main/mod_src/screenshots/loot_spillage_shader_colors.jpg)
 
