@@ -15,6 +15,8 @@ You're awesome Monitor!
 In game Loot Spillage configuration. There is now an MCM menu that allows you to configure Loot Spillage settings when ever you want.
 No more opening and closing the game to tweak ini settings.
 
+![LootSpillage Splash](https://raw.githubusercontent.com/raziell74/Skyrim-Loot-Spillage-NG-MCM-Expansion/main/mod_src/screenshots/loot_spillage_splash.jpg)
+
 ## Keyword Exclusion
 
 Items and Actors can now be excluded from dropping loot by applying the `DisableLootDrop` keyword to them. This keyword can be applied using [KID](https://www.nexusmods.com/skyrimspecialedition/mods/55728) for items and [SPID](https://www.nexusmods.com/skyrimspecialedition/mods/36869) for actors. Settings to toggle keyword exclusion for items and actors is available in the MCM.
@@ -29,17 +31,23 @@ The MCM expansion adds additional control settings for item shaders.
 - Fade after a set duration (default behavior)
 - Never fade. Keep item shaders active until the item is picked up or the player leaves the cell.
 
+![LootSpillage Shader Colors](https://raw.githubusercontent.com/raziell74/Skyrim-Loot-Spillage-NG-MCM-Expansion/main/mod_src/screenshots/loot_spillage_shader_settings.jpg)
+
 ## Shader Color Configuration
 
 You can now configure the shader colors for each item type. The default colors are the same as the original Loot Spillage mod.
 
 I plan to add 2 new shader colors for Unique and Legendary items. These will be applied using keywords applied with [KID](https://www.nexusmods.com/skyrimspecialedition/mods/55728).
 
+![LootSpillage Shader Colors](https://raw.githubusercontent.com/raziell74/Skyrim-Loot-Spillage-NG-MCM-Expansion/main/mod_src/screenshots/loot_spillage_shader_colors.jpg)
+
 ## Drop Limits
 
 Limit the amount of items dropped per actor. If too many loot items are dropped all at once it can cause a CTD or large FPS drops depending on your setup. This should also help limit the number of item references introduced by Loot Spillage.
 
 The default drop limit is set to 15 but can be adjusted in the MCM. Drop Limit is ignored If *DropAll* is set to true.
+
+![LootSpillage Shader Colors](https://raw.githubusercontent.com/raziell74/Skyrim-Loot-Spillage-NG-MCM-Expansion/main/mod_src/screenshots/loot_spillage_drop_settings.jpg)
 
 ## Quest Item Drop Control
 
@@ -52,6 +60,8 @@ Quest Item drops are disabled by default.
 In addition to the original `CreatureDrops` setting, you can now configure Loot Drops to only occur for actors killed by the player or a follower. This should help cut down on the number of item references introduced by Loot Spillage, specially in cases where a battle is happening in the same cell and actors are dying without the player being involved.
 
 These filters are enabled by default, but can be toggled in the MCM.
+
+![LootSpillage Shader Colors](https://raw.githubusercontent.com/raziell74/Skyrim-Loot-Spillage-NG-MCM-Expansion/main/mod_src/screenshots/loot_spillage_drop_filter.jpg)
 
 # Bugs Squashed
 
