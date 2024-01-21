@@ -24,28 +24,36 @@ void MessageHandler(SKSE::MessagingInterface::Message* a_msg)
 		break;
 	case SKSE::MessagingInterface::kPostLoadGame:
 		SKSE::log::info("Tick count {}", BGSSaveLoadManager::GetSingleton()->tickCount);
-		LootSpillage::Settings::Load(); 
+		LootSpillage::Settings::LoadOverrides();
 		LootSpillage::LootShaders::Configure(); 
         break;
 	case SKSE::MessagingInterface::kNewGame:
-		LootSpillage::Settings::Load(); 
+		LootSpillage::Settings::LoadOverrides();
 		LootSpillage::LootShaders::Configure(); 
 		break;
 	}
+}
+
+void UpdateLootSpillageSettings(RE::StaticFunctionTag*) { 
+	LootSpillage::Settings::LoadOverrides();
+	LootSpillage::LootShaders::Configure();
+}
+
+bool BindPapyrusFunctions(RE::BSScript::IVirtualMachine* vm) {
+    vm->RegisterFunction("UpdateLootSpillageSettings", "LootSpillageMCM", UpdateLootSpillageSettings);
+    return true;
 }
 
 SKSEPluginLoad(const SKSE::LoadInterface *skse) {
     SKSE::Init(skse);
 	SetupLog();
 
-
     auto messaging = SKSE::GetMessagingInterface();
 	if (!messaging->RegisterListener("SKSE", MessageHandler)) {
 		return false;
 	}
 
-	
-
+	SKSE::GetPapyrusInterface()->Register(BindPapyrusFunctions);
 	
     return true;
 }
