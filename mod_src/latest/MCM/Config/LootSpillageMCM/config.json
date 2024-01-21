@@ -1,0 +1,374 @@
+{
+    "modName": "LootSpillageMCM",
+    "displayName": "$LootSpillageMCM",
+    "minMcmVersion": 9,
+    "pluginRequirements": [
+        "LootSpillage.esp",
+        "LootSpillageMCM.esp"
+    ],
+    "cursorFillMode": "topToBottom",
+    "content": [],
+    "customContent": {
+        "source": "lootspillage/lootspillage_splash_512x512.dds",
+        "x": 120,
+        "y": -53
+    },
+    "pages": [
+        {
+            "pageDisplayName": "$LS_Drops_Page",
+            "cursorFillMode": "topToBottom",
+            "content": [
+                {
+                    "type": "header",
+                    "text": "$LS_Drops_Header"
+                },
+                {
+                    "id": "bDropAll:Drops",
+                    "type": "toggle",
+                    "text": "$LS_DropAll",
+                    "help": "$LS_DropAll_Help",
+                    "valueOptions": {
+                        "sourceType": "ModSettingBool",
+                        "defaultValue": true
+                    },
+                    "groupControl": 1
+                },
+                {
+                    "id": "bDropArmor:Drops",
+                    "type": "toggle",
+                    "text": "$LS_DropArmor",
+                    "help": "$LS_DropArmor_Help",
+                    "valueOptions": {
+                        "sourceType": "ModSettingBool",
+                        "defaultValue": true
+                    },
+                    "groupCondition": {"NOT": 1}
+                },
+                {
+                    "id": "bDropWeapons:Drops",
+                    "type": "toggle",
+                    "text": "$LS_DropWeapons",
+                    "help": "$LS_DropWeapons_Help",
+                    "valueOptions": {
+                        "sourceType": "ModSettingBool",
+                        "defaultValue": true
+                    },
+                    "groupCondition": {"NOT": 1}
+                },
+                {
+                    "id": "bDropOther:Drops",
+                    "type": "toggle",
+                    "text": "$LS_DropOther",
+                    "help": "$LS_DropOther_Help",
+                    "valueOptions": {
+                        "sourceType": "ModSettingBool",
+                        "defaultValue": true
+                    },
+                    "groupCondition": {"NOT": 1}
+                },
+                {
+                    "id": "iDropLimit:Drops",
+                    "type": "slider",
+                    "text": "$LS_DropLimit",
+                    "help": "$LS_DropLimit_Help",
+                    "valueOptions": {
+                        "min": 0,
+                        "max": 50,
+                        "step": 1,
+                        "formatString": "{0}",
+                        "sourceType": "ModSettingInt",
+                        "defaultValue": 15
+                    },
+                    "groupCondition": {"NOT": 1}
+                },
+                {
+                    "id": "bDropUnplayable:Drops",
+                    "type": "toggle",
+                    "text": "$LS_DropUnplayable",
+                    "help": "$LS_DropUnplayable_Help",
+                    "valueOptions": {
+                        "sourceType": "ModSettingBool",
+                        "defaultValue": false
+                    }
+                },
+                {
+                    "id": "bDropQuest:Drops",
+                    "type": "toggle",
+                    "text": "$LS_DropQuest",
+                    "help": "$LS_DropQuest_Help",
+                    "valueOptions": {
+                        "sourceType": "ModSettingBool",
+                        "defaultValue": false
+                    }
+                },
+                {
+                    "id": "bAllowItemKeywordExclusion:Drops",
+                    "type": "toggle",
+                    "text": "$LS_AllowItemKeywordExclusion",
+                    "help": "$LS_AllowItemKeywordExclusion_Help",
+                    "valueOptions": {
+                        "sourceType": "ModSettingBool",
+                        "defaultValue": true
+                    }
+                },
+                {
+                    "type": "header",
+                    "text": "$LS_Actors_Header",
+                    "position": 1
+                },
+                {
+                    "id": "iFilterKills:Actors",
+                    "type": "enum",
+                    "text": "$LS_FilterKills",
+                    "help": "$LS_FilterKills_Help",
+                    "valueOptions": {
+                      "options": [
+                        "$LS_FilterKillsDisabled_ENUM",
+                        "$LS_FilterKillsPlayerOnly_ENUM",
+                        "$LS_FilterKillsPlayerAndFollower_ENUM"
+                      ],
+                      "sourceType": "ModSettingInt",
+                      "defaultValue": 2
+                    }
+                },
+                {
+                    "id": "bCreatureDrops:Actors",
+                    "type": "toggle",
+                    "text": "$LS_CreatureDrops",
+                    "help": "$LS_CreatureDrops_Help",
+                    "valueOptions": {
+                        "sourceType": "ModSettingBool",
+                        "defaultValue": false
+                    }
+                },
+                {
+                    "id": "bAllowActorKeywordExclusion:Actors",
+                    "type": "toggle",
+                    "text": "$LS_AllowActorKeywordExclusion",
+                    "help": "$LS_AllowActorKeywordExclusion_Help",
+                    "valueOptions": {
+                        "sourceType": "ModSettingBool",
+                        "defaultValue": true
+                    }
+                }
+            ]
+        },
+        {
+            "pageDisplayName": "$LS_Shaders_Page",
+            "cursorFillMode": "topToBottom",
+            "content": [
+                {
+                    "type": "header",
+                    "text": "$LS_Shaders_Header"
+                },
+                {
+                    "id": "iVfxControl:Shaders",
+                    "type": "enum",
+                    "text": "$LS_VfxControl",
+                    "help": "$LS_VfxControl_Help",
+                    "valueOptions": {
+                      "options": [
+                        "$LS_VfxControlDisabled_ENUM",
+                        "$LS_VfxControlFadeDuration_ENUM",
+                        "$LS_VfxControlNeverFade_ENUM"
+                      ],
+                      "sourceType": "ModSettingInt",
+                      "defaultValue": 1
+                    },
+                    "groupControl": 2
+                },
+                {
+                    "id": "iShowVfxDuration:Shaders",
+                    "type": "hiddenToggle",
+                    "valueOptions": {
+                      "sourceType": "ModSettingInt",
+                      "defaultValue": 1
+                    },
+                    "groupControl": 3
+                },
+                {
+                    "id": "iApplyDelay:Shaders",
+                    "text": "$LS_ApplyDelay",
+                    "type": "slider",
+                    "help": "$LS_ApplyDelay_Help",
+                    "valueOptions": {
+                        "min": 0,
+                        "max": 5000,
+                        "step": 100,
+                        "formatString": "{0} milliseconds",
+                        "sourceType": "ModSettingInt",
+                        "defaultValue": 300
+                    },
+                    "groupCondition": 2
+                },
+                {
+                    "id": "fVfxDuration:Shaders",
+                    "type": "slider",
+                    "text": "$LS_VfxDuration",
+                    "help": "$LS_VfxDuration_Help",
+                    "valueOptions": {
+                        "min": 1,
+                        "max": 600,
+                        "step": 0.5,
+                        "formatString": "{1} seconds",
+                        "sourceType": "ModSettingFloat",
+                        "defaultValue": 15.0
+                    },
+                    "groupCondition": 3
+                },
+                {
+                    "id": "fVfxFallOff:Shaders",
+                    "type": "slider",
+                    "text": "$LS_VfxFallOff",
+                    "help": "$LS_VfxFallOff_Help",
+                    "valueOptions": {
+                        "min": 0,
+                        "max": 5,
+                        "step": 0.1,
+                        "formatString": "{1}",
+                        "sourceType": "ModSettingFloat",
+                        "defaultValue": 3.0
+                    },
+                    "groupCondition": 2
+                },
+                {
+                    "type": "header",
+                    "text": "$LS_Shader_Colors_Header",
+                    "position": 1
+                },
+                {
+                    "id": "iBaseColor:Shaders",
+                    "text": "$LS_BaseColor",
+                    "help": "$LS_BaseColor_Help",
+                    "type": "color",
+                    "valueOptions": {
+                        "sourceType": "ModSettingInt"
+                    },
+                    "groupCondition": 2
+                },
+                {
+                    "id": "iWeaponColor:Shaders",
+                    "text": "$LS_WeaponColor",
+                    "help": "$LS_WeaponColor_Help",
+                    "type": "color",
+                    "valueOptions": {
+                        "sourceType": "ModSettingInt"
+                    },
+                    "groupCondition": 2
+                },
+                {
+                    "id": "iArmorColor:Shaders",
+                    "text": "$LS_ArmorColor",
+                    "help": "$LS_ArmorColor_Help",
+                    "type": "color",
+                    "valueOptions": {
+                        "sourceType": "ModSettingInt"
+                    },
+                    "groupCondition": 2
+                },
+                {
+                    "id": "iConsumableColor:Shaders",
+                    "text": "$LS_ConsumableColor",
+                    "help": "$LS_ConsumableColor_Help",
+                    "type": "color",
+                    "valueOptions": {
+                        "sourceType": "ModSettingInt"
+                    },
+                    "groupCondition": 2
+                },
+                {
+                    "id": "iValuableColor:Shaders",
+                    "text": "$LS_ValuableColor",
+                    "help": "$LS_ValuableColor_Help",
+                    "type": "color",
+                    "valueOptions": {
+                        "sourceType": "ModSettingInt"
+                    },
+                    "groupCondition": 2
+                }
+            ]
+        },
+        {
+            "pageDisplayName": "$Maintenance_Page",
+            "cursorFillMode": "topToBottom",
+            "content": [
+                {
+                    "type": "header",
+                    "text": "$AutoloadSettings_Header"
+                },
+                {
+                    "id": "bEnabled:Maintenance",
+                    "type": "toggle",
+                    "text": "$Enabled",
+                    "help": "$EnabledMaintenance_Help",
+                    "valueOptions": {
+                        "sourceType": "ModSettingBool",
+                        "defaultValue": true
+                    }
+                },
+                {
+                    "id": "iLoadingDelay:Maintenance",
+                    "type": "slider",
+                    "text": "$LoadingDelay",
+                    "help": "$LoadingDelayMaintenance_Help",
+                    "valueOptions": {
+                        "min": 0,
+                        "max": 240,
+                        "step": 1,
+                        "defaultValue": 5,
+                        "sourceType": "ModSettingInt",
+                        "formatString": "{0}"
+                    }
+                },
+                {
+                    "id": "sLoadSettings:Maintenance",
+                    "type": "text",
+                    "text": "$LoadSettings",
+                    "help": "$LoadSettingsMaintenance_Help",
+                    "valueOptions": {
+                        "sourceType": "ModSettingString",
+                        "defaultValue": ""
+                    },
+                    "action": {
+                        "type": "CallFunction",
+                        "function": "Load"
+                    }
+                },
+                {
+                    "id": "sResetSettings:Maintenance",
+                    "type": "text",
+                    "text": "$ResetSettings",
+                    "help": "$ResetSettingsMaintenance_Help",
+                    "valueOptions": {
+                        "sourceType": "ModSettingString",
+                        "defaultValue": ""
+                    },
+                    "action": {
+                        "type": "CallFunction",
+                        "function": "Default"
+                    }
+                },
+                {
+                    "id": "bLoadSettingsOnReload:Maintenance",
+                    "type": "toggle",
+                    "text": "$LoadSettingsOnReload",
+                    "help": "$LoadSettingsOnReloadMaintenance_Help",
+                    "valueOptions": {
+                        "sourceType": "ModSettingBool",
+                        "defaultValue": false
+                    }
+                },
+                {
+                    "id": "bVerbose:Maintenance",
+                    "type": "toggle",
+                    "text": "$Verbose",
+                    "help": "$VerboseMaintenance_Help",
+                    "valueOptions": {
+                        "sourceType": "ModSettingBool",
+                        "defaultValue": true
+                    }
+                }
+            ]
+        }
+    ]
+}
