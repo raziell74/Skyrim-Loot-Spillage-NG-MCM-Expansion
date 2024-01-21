@@ -155,8 +155,6 @@ namespace LootSpillage
                 ShaderOptions.ConsumableColor = (uint32_t)ConsumableColor->value;
                 ShaderOptions.ValuableColor = (uint32_t)ValuableColor->value;
 
-                DroppedLootList = FormUtil::Form::GetFormFromMod("LootSpillageMCM.esp", 0x815)->As<BGSListForm>();
-                
                 SKSE::log::info("Settings Override from MCM");
                 SKSE::log::info(
                     "DropOptions | DropAll: {} | DropArmor: {} | DropWeapons: {} | DropOther: {} | DropLimit: {} | DropQuest: {} | AllowItemKeywordExclusion {}", 
@@ -225,14 +223,10 @@ namespace LootSpillage
 
             [[nodiscard]] static Color GetValuableShaderColor() { return Color(ShaderOptions.ValuableColor); }
 
-            static BGSListForm* GetDroppedLootList() { return DroppedLootList; }
-
         private: 
 
             static inline DroppedLoot DropOptions;
             static inline Shaders ShaderOptions;
             static inline ActorTargets ActorOptions;
-
-            static inline BGSListForm* DroppedLootList;
     };   
 }
