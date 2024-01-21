@@ -1,3 +1,90 @@
+# Loot Spillage NG - MCM Expansion
+
+Expands on Monitor144hz's amazing Loot Spillage mod by adding some new features and MCM configuration.
+
+A **HUGE** thank you to Monitor144hz for all his initial work on Loot Spillage, and making the source code public allowing me to expand on it.
+
+You're awesome Monitor!
+
+# New Features
+
+*Loot Spillage NG - MCM Expansion* adds a few new features to the original Loot Spillage mod.
+
+## MCM
+
+In game Loot Spillage configuration. There is now an MCM menu that allows you to configure Loot Spillage settings when ever you want.
+No more opening and closing the game to tweak ini settings.
+
+## Keyword Exclusion
+
+Items and Actors can now be excluded from dropping loot by applying the `DisableLootDrop` keyword to them. This keyword can be applied using [KID](https://www.nexusmods.com/skyrimspecialedition/mods/55728) for items and [SPID](https://www.nexusmods.com/skyrimspecialedition/mods/36869) for actors. Settings to toggle keyword exclusion for items and actors is available in the MCM.
+
+I've included a few optional patches that use this feature. See the Optional Patches section for more details.
+
+## Additional Shader Control
+
+The MCM expansion adds additional control settings for item shaders.
+
+- Completely disable item shading
+- Fade after a set duration (default behavior)
+- Never fade. Keep item shaders active until the item is picked up or the player leaves the cell.
+
+## Shader Color Configuration
+
+You can now configure the shader colors for each item type. The default colors are the same as the original Loot Spillage mod.
+
+I plan to add 2 new shader colors for Unique and Legendary items. These will be applied using keywords applied with [KID](https://www.nexusmods.com/skyrimspecialedition/mods/55728).
+
+## Drop Limits
+
+Limit the amount of items dropped per actor. If too many loot items are dropped all at once it can cause a CTD or large FPS drops depending on your setup. This should also help limit the number of item references introduced by Loot Spillage.
+
+The default drop limit is set to 15 but can be adjusted in the MCM. Drop Limit is ignored If *DropAll* is set to true.
+
+## Quest Item Drop Control
+
+Quest Items can now be configured to be dropped or remain on the actors body. This feature is helpful in some cases where a quest item is required to be looted from a body to progress a quest like the Heads introduced by [Headhunter - Bounties Redone](https://www.nexusmods.com/skyrimspecialedition/mods/51847).
+
+Quest Item drops are disabled by default.
+
+## Actor Loot Drop Filters
+
+In addition to the original `CreatureDrops` setting, you can now configure Loot Drops to only occur for actors killed by the player or a follower. This should help cut down on the number of item references introduced by Loot Spillage, specially in cases where a battle is happening in the same cell and actors are dying without the player being involved.
+
+These filters are enabled by default, but can be toggled in the MCM.
+
+# Bugs Squashed
+
+In addition to some of the new features, MCM Expansion also fixes up a few bugs.
+
+- Fixed a bug where items with blank names would still go through the item drop process even though they are not valid.
+- Unplayable items would still be dropped if the `DropAll` setting was enabled. The `DropAll` setting will now only override `DropWeapons`, `DropArmor`, and `DropOther`
+- In some cases NPC inventory would include an item that is not a "droppable" FormType which would cause a CTD. To fix this, the logic for `DropOther` has been updated to white list supported FormTypes instead of dropping anything that's not weapons or armor.
+- Added a few more checks for item reference validity after being removed from the actors inventory. In some cases changing cells would sometimes cause a CTD. This should fix that.
+- Fixed a CTD caused by NPCs prematurely spilling their lootage before they were dead dead. The DeathEvent used to track actor deaths triggers twice, once when the actor is dying and once when they have finished dying. This will now only trigger once when the actor has finished dying so that spilling loot during certain death animations won't cause a CTD.
+- New log messages have been added to help identify any additional issues with the item drop process. If you experience CTD related to LootSpillage.dll please send me your log file so I can investigate. I'll be looking at adding a *Debug Mode* setting to the MCM in the future to prevent log spam unless you need it.
+
+# Optional Patches
+
+## Creature Exclusion Patch
+
+This patch is for anyone having issues with creatures still dropping loot. The issue typically arises due to some mods like [SkyTEST - Realistic Animals and Predators SE](https://www.nexusmods.com/skyrimspecialedition/mods/1104) removing animals from the CreatureFaction. The CreatureFaction is what Loot Spillage uses to identify creatures for the 'CreatureDrops' setting. This patch uses [SPID](https://www.nexusmods.com/skyrimspecialedition/mods/36869) to work to apply the new `DisableLootDrop` keyword to all animals. 
+
+Requires [SPID](https://www.nexusmods.com/skyrimspecialedition/mods/36869) to work.
+
+## Bandolier - Bags and Pouches Patch
+
+Some of the models used in [Bandolier - Bags and Pouches](https://www.nexusmods.com/skyrimspecialedition/mods/3533) cause CTDs when shaders are applied. I'm not sure why, but this patch will prevent the items from this mod from dropping using the new `DisableLootDrop` keyword.
+
+Requires [KID](https://www.nexusmods.com/skyrimspecialedition/mods/55728) to work.
+
+## Underwear Exclusion Patch
+
+This patch will prevent underwear from being dropped. Very helpful if you are using an underwear mod that dynamically adds underwear to NPCs like [NPC Underwear Distribution Engine](https://www.nexusmods.com/skyrimspecialedition/mods/94018) or [Equippable Underwear for NPCs](https://www.nexusmods.com/skyrimspecialedition/mods/45277). 
+
+Requires [OCF](https://www.nexusmods.com/skyrimspecialedition/mods/81469) and [KID](https://www.nexusmods.com/skyrimspecialedition/mods/55728) to work.
+
+***NOTE:*** If you don't already have [OCF](https://www.nexusmods.com/skyrimspecialedition/mods/81469) installed, a new game is recommended.
 
 # CommonLibSSE NG
 
