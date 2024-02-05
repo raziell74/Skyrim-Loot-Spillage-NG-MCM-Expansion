@@ -37,7 +37,7 @@ The MCM expansion adds additional control settings for item shaders.
 
 You can now configure the shader colors for each item type. The default colors are the same as the original Loot Spillage mod.
 
-I plan to add 2 new shader colors for Unique and Legendary items. These will be applied using keywords applied with [KID](https://www.nexusmods.com/skyrimspecialedition/mods/55728).
+I plan to add 2 new shader colors for Unique and Legendary items. These colors will be assigned using keywords applied through [KID](https://www.nexusmods.com/skyrimspecialedition/mods/55728).
 
 ![LootSpillage Shader Colors](https://raw.githubusercontent.com/raziell74/Skyrim-Loot-Spillage-NG-MCM-Expansion/main/mod_src/screenshots/loot_spillage_shader_colors.jpg)
 
@@ -78,19 +78,19 @@ In addition to some of the new features, MCM Expansion also fixes up a few bugs.
 
 ## Creature Exclusion Patch
 
-This patch is for anyone having issues with creatures still dropping loot. The issue typically arises due to some mods like [SkyTEST - Realistic Animals and Predators SE](https://www.nexusmods.com/skyrimspecialedition/mods/1104) removing animals from the CreatureFaction. The CreatureFaction is what Loot Spillage uses to identify creatures for the 'CreatureDrops' setting. This patch uses [SPID](https://www.nexusmods.com/skyrimspecialedition/mods/36869) to work to apply the new `DisableLootDrop` keyword to all animals. 
+This patch is for anyone having issues with creatures still dropping loot. The issue typically arises due to some mods like [SkyTEST - Realistic Animals and Predators SE](https://www.nexusmods.com/skyrimspecialedition/mods/1104) removing animals from the CreatureFaction. The CreatureFaction is what Loot Spillage uses to identify creatures for the 'CreatureDrops' setting. This patch uses [SPID](https://www.nexusmods.com/skyrimspecialedition/mods/36869) to apply the new `DisableLootDrop` keyword to all animal races. 
 
 Requires [SPID](https://www.nexusmods.com/skyrimspecialedition/mods/36869) to work.
 
 ## Bandolier - Bags and Pouches Patch
 
-Some of the models used in [Bandolier - Bags and Pouches](https://www.nexusmods.com/skyrimspecialedition/mods/3533) cause CTDs when shaders are applied. I'm not sure why, but this patch will prevent the items from this mod from dropping using the new `DisableLootDrop` keyword.
+Some of the models used in [Bandolier - Bags and Pouches](https://www.nexusmods.com/skyrimspecialedition/mods/3533) cause CTDs when shaders are applied. I'm not sure why, but this patch will prevent the bad items from dropping using the new `DisableLootDrop` keyword.
 
 Requires [KID](https://www.nexusmods.com/skyrimspecialedition/mods/55728) to work.
 
 ## Underwear Exclusion Patch
 
-This patch will prevent underwear from being dropped. Very helpful if you are using an underwear mod that dynamically adds underwear to NPCs like [NPC Underwear Distribution Engine](https://www.nexusmods.com/skyrimspecialedition/mods/94018) or [Equippable Underwear for NPCs](https://www.nexusmods.com/skyrimspecialedition/mods/45277). 
+This patch will prevent underwear from being dropped. Very helpful if you are using an underwear mod that dynamically adds underwear to NPCs like [NPC Underwear Distribution Engine](https://www.nexusmods.com/skyrimspecialedition/mods/94018) or [Equippable Underwear for NPCs](https://www.nexusmods.com/skyrimspecialedition/mods/45277). Dead actors will now longer be showing their bits until you manually take their no no cloth.
 
 Requires [OCF](https://www.nexusmods.com/skyrimspecialedition/mods/81469) and [KID](https://www.nexusmods.com/skyrimspecialedition/mods/55728) to work.
 
