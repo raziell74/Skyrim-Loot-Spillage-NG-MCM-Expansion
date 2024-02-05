@@ -1,4 +1,4 @@
-# Loot Spillage NG - MCM Expansion
+![Loot Spillage - MCM Expansion](https://raw.githubusercontent.com/raziell74/Skyrim-Loot-Spillage-NG-MCM-Expansion/main/mod_src/screenshots/lsme_header.png)
 
 Expands on Monitor144hz's amazing Loot Spillage mod by adding some new features and MCM configuration.
 
@@ -6,7 +6,7 @@ A **HUGE** thank you to Monitor144hz for all his initial work on Loot Spillage, 
 
 You're awesome Monitor!
 
-# New Features
+![New Features](https://raw.githubusercontent.com/raziell74/Skyrim-Loot-Spillage-NG-MCM-Expansion/main/mod_src/screenshots/lsme_new_features_header.png)
 
 *Loot Spillage NG - MCM Expansion* adds a few new features to the original Loot Spillage mod.
 
@@ -63,7 +63,7 @@ These filters are enabled by default, but can be toggled in the MCM.
 
 ![LootSpillage Shader Colors](https://raw.githubusercontent.com/raziell74/Skyrim-Loot-Spillage-NG-MCM-Expansion/main/mod_src/screenshots/loot_spillage_drop_filter.jpg)
 
-# Bugs Squashed
+![Bugs Squashed](https://raw.githubusercontent.com/raziell74/Skyrim-Loot-Spillage-NG-MCM-Expansion/main/mod_src/screenshots/lsme_bugs_squashed_header.png)
 
 In addition to some of the new features, MCM Expansion also fixes up a few bugs.
 
@@ -74,7 +74,7 @@ In addition to some of the new features, MCM Expansion also fixes up a few bugs.
 - Fixed a CTD caused by NPCs prematurely spilling their lootage before they were dead dead. The DeathEvent used to track actor deaths triggers twice, once when the actor is dying and once when they have finished dying. This will now only trigger once when the actor has finished dying so that spilling loot during certain death animations won't cause a CTD.
 - New log messages have been added to help identify any additional issues with the item drop process. If you experience CTD related to LootSpillage.dll please send me your log file so I can investigate. I'll be looking at adding a *Debug Mode* setting to the MCM in the future to prevent log spam unless you need it.
 
-# Optional Patches
+![Optional Patches](https://raw.githubusercontent.com/raziell74/Skyrim-Loot-Spillage-NG-MCM-Expansion/main/mod_src/screenshots/lsme_optional_patches_header.png)
 
 ## Creature Exclusion Patch
 
@@ -96,7 +96,7 @@ Requires [OCF](https://www.nexusmods.com/skyrimspecialedition/mods/81469) and [K
 
 ***NOTE:*** If you don't already have [OCF](https://www.nexusmods.com/skyrimspecialedition/mods/81469) installed, a new game is recommended.
 
-# CommonLibSSE NG
+# Project Setup with CommonLibSSE NG
 
 Because this uses [CommonLibSSE NG](https://github.com/CharmedBaryon/CommonLibSSE-NG), it supports Skyrim SE, AE, GOG, and VR. 
 
