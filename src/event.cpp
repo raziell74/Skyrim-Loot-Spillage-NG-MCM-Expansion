@@ -3,10 +3,8 @@
 
 namespace LootSpillage
 {
-    RE::BSEventNotifyControl DeathEventHandler::ProcessEvent(const TESDeathEvent *a_event, RE::BSTEventSource<TESDeathEvent> *a_eventSource)
-    {
-
-        using Result = RE::BSEventNotifyControl; 
+    RE::BSEventNotifyControl DeathEventHandler::ProcessEvent(const TESDeathEvent *a_event, RE::BSTEventSource<TESDeathEvent> *a_eventSource) {
+        using Result = RE::BSEventNotifyControl;
 
         auto* ref = a_event->actorDying.get();
         if (!ref || ref->GetFormType() != FormType::ActorCharacter || !ref->Is3DLoaded() || !a_event->dead) return Result::kContinue;
@@ -41,5 +39,19 @@ namespace LootSpillage
         LootHandler::DropInventory(actor); 
 
         return Result::kContinue; 
+    }
+
+    RE::BSEventNotifyControl CellLoadEventHandler::ProcessEvent(const TESCellAttachDetachEvent *a_event, RE::BSTEventSource<TESCellAttachDetachEvent> *a_eventSource) {
+        using Result = RE::BSEventNotifyControl;
+        
+        if (a_event->attached) {
+            // Skip if the cell is attaching
+            return Result::kContinue; 
+        }
+
+        NiPointer<TESObjectREFR> refr = a_event->reference;
+        LootHandler::CleanUpLoot(refr);
+
+        return Result::kContinue;
     }
 }

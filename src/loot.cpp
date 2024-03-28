@@ -103,7 +103,69 @@ namespace LootSpillage
         actor->GetDroppedInventory().emplace(loot, pair);
         
         auto* refr = handle.get().get();
+        if (!refr) return;
+
+        // Remove owner so loot that somehow has an owner assigned to it can be picked up by anyone
+        refr->extraList.SetOwner(nullptr);
+
         LootShaders::QueueLootShader(refr);
     }
     
+    void LootHandler::CleanUpLoot(NiPointer<TESObjectREFR> refr) {
+        using Count = std::int32_t;
+        using InventoryDropMap = std::map<TESBoundObject*, std::pair<Count, std::vector<ObjectRefHandle>>>;
+
+        float cleanUpMode = Settings::GetCleanUpMode();
+        if (cleanUpMode == 2) { // Do not clean loot
+            return;
+        }
+
+        BGSListForm* DroppedLootList = Settings::GetDroppedLootList();
+        if (!DroppedLootList || DroppedLootList->scriptAddedFormCount == 0) return;
+
+        FormID formId = refr->GetFormID();
+        if (!formId || !DroppedLootList->HasForm(formId)) {
+            return;
+        }
+        
+        if (refr->IsHeadingMarker()) {
+            SKSE::log::info("{} [0x{:X}] is a quest marker - skipping", refr->GetName(), formId);
+            return;
+        }
+
+        BSTArray<FormID>*  scriptAddedTempForms = DroppedLootList->scriptAddedTempForms;
+        if (scriptAddedTempForms->empty()) return;
+        
+        // Release from the DroppedLootList to free up memory and prevent larger loops when checking HasForm
+        std::uint32_t i = 0;
+        std::uint32_t count = scriptAddedTempForms->size();
+        for (i = 0; i < count; i++) {
+            if (formId == scriptAddedTempForms->operator[](i)) {
+                scriptAddedTempForms->erase(scriptAddedTempForms->data() + i);
+                SKSE::log::info("Removed Form {} [0x{:X}] from SpilledLootList", refr->GetName(), formId);
+                break;
+            }
+        }
+
+        if (cleanUpMode == 1) { // Immediate cleanup on cell detach
+            SKSE::log::info("Deleting loot {} [0x{:X}] from the world", refr->GetName(), formId);
+            refr->Disable();
+            refr->SetDelete(true);
+            return;
+        }
+
+        // Default clean up mode, move to cleanup chest
+        TESObjectREFR* cleanUpContainer = Settings::GetCleanUpContainer();
+        Actor* garbageMan = Settings::GetGarbageMan();
+        std::int32_t lootCount = refr->extraList.GetCount();
+        if (!lootCount || lootCount == 0) lootCount = 1;
+        SKSE::log::info("GarbageMan 0x{:X} is collecting {} {} [0x{:X}] to put into the cleanup chest 0x{:X}", garbageMan->GetFormID(), lootCount, refr->GetName(), formId, cleanUpContainer->GetFormID());
+        garbageMan->PickUpObject(refr.get(), lootCount, false, false);
+        
+        RE::ExtraDataList* extraList = &refr->extraList;
+        if (!extraList) extraList = nullptr;
+        garbageMan->RemoveItem(refr.get()->GetObjectReference(), lootCount, ITEM_REMOVE_REASON::kStoreInContainer, nullptr, cleanUpContainer);
+
+        // @TODO figure out how to place loot back on actor
+    }
 }

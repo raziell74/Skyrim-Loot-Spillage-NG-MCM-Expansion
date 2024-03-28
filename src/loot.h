@@ -17,6 +17,8 @@ namespace LootSpillage
 
                 static void DropInventory(Actor* actor);
 
+                static void CleanUpLoot(NiPointer<TESObjectREFR> refr);
+
             private:
 
                 static bool CanDrop(TESBoundObject* loot);

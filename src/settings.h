@@ -44,6 +44,15 @@ namespace LootSpillage
                 uint32_t ValuableColor = 0xfad502;
             };
 
+            struct CleanUp
+            {
+                float LootLifeTime = 24; // In Game Hours
+                float CleanUpMode = 0;
+                BGSListForm* DroppedLootList = nullptr;
+                TESObjectREFR* Container = nullptr;
+                Actor* GarbageMan = nullptr;
+            };
+
             static void Load()
             {
                 constexpr auto path = L"Data/SKSE/Plugins/LootSpillage/Settings.ini";
@@ -179,6 +188,28 @@ namespace LootSpillage
                     ShaderOptions.FallOff, 
                     ShaderOptions.ApplyDelay
                 );
+
+                // Clean Up Options
+                TESGlobal* LootLifeTime = FormUtil::Form::GetFormFromMod("LootSpillageMCM.esp", 0x819)->As<TESGlobal>();
+                TESGlobal* CleanUpMode = FormUtil::Form::GetFormFromMod("LootSpillageMCM.esp", 0x81D)->As<TESGlobal>();
+                BGSListForm* DroppedLootList = FormUtil::Form::GetFormFromMod("LootSpillageMCM.esp", 0x815)->As<BGSListForm>();
+                TESObjectREFR* Container = FormUtil::Form::GetFormFromMod("LootSpillageMCM.esp", 0x81B)->As<TESObjectREFR>();
+                RE::Actor* GarbageMan = FormUtil::Form::GetFormFromMod("LootSpillageMCM.esp", 0x81C)->As<Actor>();
+
+                CleanUpOptions.LootLifeTime = LootLifeTime->value;
+                CleanUpOptions.CleanUpMode = CleanUpMode->value;
+                CleanUpOptions.DroppedLootList = DroppedLootList;
+                CleanUpOptions.Container = Container;
+                CleanUpOptions.GarbageMan = GarbageMan;
+
+                SKSE::log::info(
+                    "CleanUpOptions | LootLifeTime: {} | CleanUpMode: {} | DroppedLootList: {} | Container: {} | GarbageMan: {}", 
+                    CleanUpOptions.LootLifeTime, 
+                    CleanUpOptions.CleanUpMode,
+                    fmt::format("0x{:X}", CleanUpOptions.DroppedLootList->GetFormID()),
+                    fmt::format("0x{:X}", CleanUpOptions.Container->GetFormID()),
+                    fmt::format("0x{:X}", CleanUpOptions.GarbageMan->GetFormID())
+                );
             }
 
             [[nodiscard]] static bool ShouldDropAll() { return DropOptions.DropAll; }
@@ -223,10 +254,21 @@ namespace LootSpillage
 
             [[nodiscard]] static Color GetValuableShaderColor() { return Color(ShaderOptions.ValuableColor); }
 
+            [[nodiscard]] static float GetLootLifeTime() { return CleanUpOptions.LootLifeTime; }
+
+            [[nodiscard]] static float GetCleanUpMode() { return CleanUpOptions.CleanUpMode; }
+
+            [[nodiscard]] static BGSListForm* GetDroppedLootList() { return CleanUpOptions.DroppedLootList; }
+
+            [[nodiscard]] static TESObjectREFR* GetCleanUpContainer() { return CleanUpOptions.Container; }
+
+            [[nodiscard]] static Actor* GetGarbageMan() { return CleanUpOptions.GarbageMan; }
+
         private: 
 
             static inline DroppedLoot DropOptions;
             static inline Shaders ShaderOptions;
             static inline ActorTargets ActorOptions;
+            static inline CleanUp CleanUpOptions;
     };   
 }

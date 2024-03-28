@@ -20,11 +20,22 @@ namespace LootSpillage
             return &singleton; 
         }
 
-
-
          virtual RE::BSEventNotifyControl ProcessEvent(const TESDeathEvent *a_event, RE::BSTEventSource<TESDeathEvent> *a_eventSource) override;
-
     };
 
+    class CellLoadEventHandler : public RE::BSTEventSink<RE::TESCellAttachDetachEvent>
+    {
 
+        public: 
+        static void Install() {
+            ScriptEventSourceHolder::GetSingleton()->GetEventSource<TESCellAttachDetachEvent>()->AddEventSink(GetSingleton()); 
+            SKSE::log::info("Registered {}", typeid(RE::TESCellAttachDetachEvent).name()); 
+        }
+        static CellLoadEventHandler* GetSingleton() {
+            static CellLoadEventHandler singleton; 
+            return &singleton; 
+        }
+
+        virtual RE::BSEventNotifyControl ProcessEvent(const TESCellAttachDetachEvent *a_event, RE::BSTEventSource<TESCellAttachDetachEvent> *a_eventSource) override;
+    };
 }

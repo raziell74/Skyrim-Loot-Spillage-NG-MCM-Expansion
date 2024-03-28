@@ -128,5 +128,10 @@ namespace LootSpillage
         } else {
             refr->ApplyEffectShader(shader, Duration);
         }
+
+        // Add the dropped ref formId to the DroppedLootList form list for later cleanup
+        BGSListForm* DroppedLootList = Settings::GetDroppedLootList();
+        SKSE::log::info("Adding {} {} [0x{:X}] to the DroppedLootList", refr->extraList.GetCount(), refr->GetName(), refr->GetFormID());
+        DroppedLootList->AddForm(refr);
     }
 }
