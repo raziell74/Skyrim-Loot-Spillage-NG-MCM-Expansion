@@ -212,6 +212,20 @@ namespace LootSpillage
                 );
             }
 
+            static void reset()
+            {
+                DropOptions = DroppedLoot();
+                ShaderOptions = Shaders();
+                ActorOptions = ActorTargets();
+
+                // Make sure if there's a formlist it's cleared for the next game save
+                if (CleanUpOptions.DroppedLootList) {
+                    CleanUpOptions.DroppedLootList->ClearData();
+                }
+
+                CleanUpOptions = CleanUp();
+            }
+
             [[nodiscard]] static bool ShouldDropAll() { return DropOptions.DropAll; }
 
             [[nodiscard]] static bool ShouldDropArmor() { return DropOptions.DropArmor; }
