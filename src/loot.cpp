@@ -135,6 +135,20 @@ namespace LootSpillage
             return;
         }
 
+        auto* baseObject = refr->GetBaseObject();
+        if (!baseObject) return;
+
+        switch(baseObject->GetFormType())
+        {
+            case FormType::AlchemyItem:
+            case FormType::Ingredient:
+            case FormType::Armor:
+            case FormType::Weapon:
+            case FormType::KeyMaster:
+            default: // Do not clean anything that's not a consumable, armor, weapon, or valuable
+                return;
+        }
+
         BSTArray<FormID>*  scriptAddedTempForms = DroppedLootList->scriptAddedTempForms;
         if (scriptAddedTempForms->empty()) return;
         
