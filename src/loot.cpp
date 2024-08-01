@@ -145,6 +145,7 @@ namespace LootSpillage
             case FormType::Armor:
             case FormType::Weapon:
             case FormType::KeyMaster:
+                break;
             default: // Do not clean anything that's not a consumable, armor, weapon, or valuable
                 return;
         }
