@@ -147,6 +147,7 @@ namespace LootSpillage
             case FormType::KeyMaster:
                 break;
             default: // Do not clean anything that's not a consumable, armor, weapon, or valuable
+                SKSE::log::info("None Droppable Form discovered in DroppedLootList {} [0x{:X}] from SpilledLootList", refr->GetName(), formId);
                 return;
         }
 
