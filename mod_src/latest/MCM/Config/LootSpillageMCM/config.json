@@ -214,7 +214,7 @@
                         "sourceType": "ModSettingFloat",
                         "defaultValue": 15.0
                     },
-                    "groupCondition": {"AND": [2, 3]}
+                    "groupCondition": 3
                 },
                 {
                     "id": "fVfxFallOff:Shaders",
@@ -234,8 +234,7 @@
                 {
                     "type": "header",
                     "text": "$LS_Shader_Colors_Header",
-                    "position": 1,
-                    "groupCondition": 2
+                    "position": 1
                 },
                 {
                     "id": "iBaseColor:Shaders",
@@ -244,8 +243,7 @@
                     "type": "color",
                     "valueOptions": {
                         "sourceType": "ModSettingInt"
-                    },
-                    "groupCondition": 2
+                    }
                 },
                 {
                     "id": "iConsumableColor:Shaders",
@@ -254,8 +252,7 @@
                     "type": "color",
                     "valueOptions": {
                         "sourceType": "ModSettingInt"
-                    },
-                    "groupCondition": 2
+                    }
                 },
                 {
                     "id": "iValuableColor:Shaders",
@@ -264,8 +261,7 @@
                     "type": "color",
                     "valueOptions": {
                         "sourceType": "ModSettingInt"
-                    },
-                    "groupCondition": 2
+                    }
                 },
                 {
                     "type": "empty"
@@ -287,8 +283,7 @@
                         ],
                         "sourceType": "ModSettingInt",
                         "defaultValue": 1
-                    },
-                    "groupCondition": 2
+                    }
                 },
                 {
                     "id": "iShowRarityColors:Shaders",
@@ -373,7 +368,7 @@
                     "valueOptions": {
                         "sourceType": "ModSettingInt"
                     },
-                    "groupCondition": {"AND": [2, {"NOT": 5}]},
+                    "groupCondition": {"NOT": 5},
                     "groupBehavior": "skip"
                 },
                 {
@@ -384,7 +379,7 @@
                     "valueOptions": {
                         "sourceType": "ModSettingInt"
                     },
-                    "groupCondition": {"AND": [2, {"NOT": 5}]},
+                    "groupCondition": {"NOT": 5},
                     "groupBehavior": "skip"
                 }
             ]

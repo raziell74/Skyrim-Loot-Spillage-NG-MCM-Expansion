@@ -27,5 +27,9 @@ namespace LootSpillage
             
             static inline TESFaction* CreatureFaction;
             static inline BGSKeyword* DisableLootDropKYWD;
+
+        private:
+
+            static inline std::vector<std::pair<Actor*, std::vector<NiPointer<TESObjectREFR>>>> ActorLootSpillage;
     };
 }
