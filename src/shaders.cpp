@@ -16,6 +16,13 @@ namespace LootSpillage
         RareShader = FormUtil::Form::GetFormFromMod("LootSpillageMCM.esp", 0x82B)->As<TESEffectShader>();
         EpicShader = FormUtil::Form::GetFormFromMod("LootSpillageMCM.esp", 0x82C)->As<TESEffectShader>();
         LegendaryShader = FormUtil::Form::GetFormFromMod("LootSpillageMCM.esp", 0x82D)->As<TESEffectShader>();
+        ArtifactShader = FormUtil::Form::GetFormFromMod("LootSpillageMCM.esp", 0x82E)->As<TESEffectShader>();
+        
+        CommonKywd = FormUtil::Form::GetFormFromMod("LootSpillageMCM.esp", 0x81E)->As<BGSKeyword>();
+        UncommonKywd = FormUtil::Form::GetFormFromMod("LootSpillageMCM.esp", 0x81F)->As<BGSKeyword>();
+        RareKywd = FormUtil::Form::GetFormFromMod("LootSpillageMCM.esp", 0x820)->As<BGSKeyword>();
+        EpicKywd = FormUtil::Form::GetFormFromMod("LootSpillageMCM.esp", 0x821)->As<BGSKeyword>();
+        LegendaryKywd = FormUtil::Form::GetFormFromMod("LootSpillageMCM.esp", 0x830)->As<BGSKeyword>();
     }
 
     void LootShaders::Configure()
@@ -36,6 +43,7 @@ namespace LootSpillage
         ConfigureShader(RareShader, Settings::GetRareShaderColor(), fallOff, "RareShader");
         ConfigureShader(EpicShader, Settings::GetEpicShaderColor(), fallOff, "EpicShader");
         ConfigureShader(LegendaryShader, Settings::GetLegendaryShaderColor(), fallOff, "LegendaryShader");
+        ConfigureShader(ArtifactShader, Settings::GetArtifactShaderColor(), fallOff, "ArtifactShader");
     }
 
     void LootShaders::ConfigureShader(TESEffectShader *shader, Color color, float fallOff, std::string name)
@@ -84,24 +92,6 @@ namespace LootSpillage
         ApplyLootShader(refr);
     }
 
-    // std::string LootShaders::GetRarity(TESObjectREFR* refr)
-    // {
-    //     // loot->HasKeywordInArray(std::vector<BGSKeyword*> {DisableLootDropKYWD}, false)
-    //     return "Common";
-    // }
-
-    // Shader LootShaders::GetRarityShader(std::string type, FormType formType)
-    // {
-    //     if (type == "Common") return CommonShader;
-    //     if (type == "Uncommon") return UncommonShader;
-    //     if (type == "Rare") return RareShader;
-    //     if (type == "Epic") return EpicShader;
-    //     if (type == "Legendary") return LegendaryShader;
-    //     if (formType == FormType::Armor) return ArmorShader;
-    //     if (formType == FormType::Weapon) return WeaponShader;
-    //     return BaseShader;
-    // }
-
     void LootShaders::ApplyLootShader(TESObjectREFR *refr)
     {
         if (!refr) return;
@@ -118,7 +108,7 @@ namespace LootSpillage
         TESEffectShader* shader;
         std::string shaderType = "";
         float gearShaderMode = Settings::GetGearShaderMode();
-        std::string rarity = "Common";
+        LootSpillage::RarityType rarity = LootSpillage::RarityType::None;
         FormType baseFormType = baseObject->GetFormType();
         switch(baseFormType)
         {
@@ -137,7 +127,7 @@ namespace LootSpillage
                 } else {
                     rarity = LootShaders::GetRarity(refr);
                     shader = LootShaders::GetRarityShader(rarity, baseFormType);
-                    shaderType = rarity + "ArmorShader";
+                    shaderType = "ArmorShader";
                 }
                 break;
             case FormType::Weapon:
@@ -147,7 +137,7 @@ namespace LootSpillage
                 } else {
                     rarity = LootShaders::GetRarity(refr);
                     shader = LootShaders::GetRarityShader(rarity, baseFormType);
-                    shaderType = rarity + "WeaponShader";
+                    shaderType = "WeaponShader";
                 }
                 break; 
             case FormType::KeyMaster:

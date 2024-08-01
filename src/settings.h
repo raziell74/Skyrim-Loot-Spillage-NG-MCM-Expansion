@@ -49,6 +49,7 @@ namespace LootSpillage
                 uint32_t RareColor = 0x5470C2;
                 uint32_t EpicColor = 0x5A4190;
                 uint32_t LegendaryColor = 0xCC8F58;
+                uint32_t ArtifactColor = 0xAD137B;
             };
 
             struct CleanUp
@@ -169,6 +170,7 @@ namespace LootSpillage
                 TESGlobal* RareColor = FormUtil::Form::GetFormFromMod("LootSpillageMCM.esp", 0x826)->As<TESGlobal>();
                 TESGlobal* EpicColor = FormUtil::Form::GetFormFromMod("LootSpillageMCM.esp", 0x827)->As<TESGlobal>();
                 TESGlobal* LegendaryColor = FormUtil::Form::GetFormFromMod("LootSpillageMCM.esp", 0x828)->As<TESGlobal>();
+                TESGlobal* ArtifactColor = FormUtil::Form::GetFormFromMod("LootSpillageMCM.esp", 0x82F)->As<TESGlobal>();
 
                 TESGlobal* WeaponColor = FormUtil::Form::GetFormFromMod("LootSpillageMCM.esp", 0x80F)->As<TESGlobal>();
                 TESGlobal* ArmorColor = FormUtil::Form::GetFormFromMod("LootSpillageMCM.esp", 0x810)->As<TESGlobal>();
@@ -183,6 +185,7 @@ namespace LootSpillage
                 ShaderOptions.RareColor = (uint32_t)RareColor->value;
                 ShaderOptions.EpicColor = (uint32_t)EpicColor->value;
                 ShaderOptions.LegendaryColor = (uint32_t)LegendaryColor->value;
+                ShaderOptions.ArtifactColor = (uint32_t)ArtifactColor->value;
 
                 ShaderOptions.ArmorColor = (uint32_t)ArmorColor->value;
                 ShaderOptions.WeaponColor = (uint32_t)WeaponColor->value;
@@ -199,6 +202,10 @@ namespace LootSpillage
                 // [v44] LS_RareLoot [KYWD:FE001820]
                 // [v44] LS_EpicLoot [KYWD:FE001821]
                 // [v44] LS_LegendaryLoot [KYWD:FE001822]
+
+                // [v44] LS_ArtifactShader [EFSH:FE00182E]
+                // [v44] LS_ArtifactColor [GLOB:FE00182F]
+                // [v44] LS_ArtifactLoot [KYWD:FE001830]
 
                 SKSE::log::info("Settings Override from MCM");
                 SKSE::log::info(
@@ -315,6 +322,8 @@ namespace LootSpillage
             [[nodiscard]] static Color GetEpicShaderColor() { return Color(ShaderOptions.EpicColor); }
 
             [[nodiscard]] static Color GetLegendaryShaderColor() { return Color(ShaderOptions.LegendaryColor); }
+
+            [[nodiscard]] static Color GetArtifactShaderColor() { return Color(ShaderOptions.ArtifactColor); }
 
             [[nodiscard]] static float GetLootLifeTime() { return CleanUpOptions.LootLifeTime; }
 

@@ -7,9 +7,21 @@ using namespace RE;
 #include <unordered_set>
 namespace LootSpillage
 {
+    enum class RarityType
+	{
+        None = 0,
+		Common,
+		Uncommon,
+		Rare,
+		Epic,
+        Legendary,
+        Artifact
+	};
+
     class LootShaders 
     {
         using Shader = TESEffectShader; 
+        using RarityType = LootSpillage::RarityType; 
 
         public: 
         
@@ -23,26 +35,28 @@ namespace LootSpillage
         
             static void ApplyLootShader(TESObjectREFR* refr);
 
-            [[nodiscard]] static Shader* GetRarityShader(std::string type, FormType formType) {
-                if (type == "Common") return CommonShader;
-                if (type == "Uncommon") return UncommonShader;
-                if (type == "Rare") return RareShader;
-                if (type == "Epic") return EpicShader;
-                if (type == "Legendary") return LegendaryShader;
-                if (formType == FormType::Armor) return ArmorShader;
-                if (formType == FormType::Weapon) return WeaponShader;
+            [[nodiscard]] static Shader* GetRarityShader(RarityType rarity, FormType formType) {
+                if (rarity == RarityType::Common) return CommonShader;
+                if (rarity == RarityType::Uncommon) return UncommonShader;
+                if (rarity == RarityType::Rare) return RareShader;
+                if (rarity == RarityType::Epic) return EpicShader;
+                if (rarity == RarityType::Legendary) return LegendaryShader;
+                if (rarity == RarityType::Artifact) return ArtifactShader;
+                // if (formType == FormType::Armor) return ArmorShader;
+                // if (formType == FormType::Weapon) return WeaponShader;
                 return BaseShader;
             }
 
-            [[nodiscard]] static std::string GetRarity(TESObjectREFR* refr) {
-                if (!refr) return "";
+            [[nodiscard]] static RarityType GetRarity(TESObjectREFR* refr) {
+                if (!refr) return RarityType::None;
                 TESBoundObject* loot = refr->GetBaseObject();
-                if (loot->HasKeywordInArray(std::vector<BGSKeyword*> {CommonKywd}, false)) return "Common";
-                if (loot->HasKeywordInArray(std::vector<BGSKeyword*> {UncommonKywd}, false)) return "Uncommon";
-                if (loot->HasKeywordInArray(std::vector<BGSKeyword*> {RareKywd}, false)) return "Rare";
-                if (loot->HasKeywordInArray(std::vector<BGSKeyword*> {EpicKywd}, false)) return "Epic";
-                if (loot->HasKeywordInArray(std::vector<BGSKeyword*> {LegendaryKywd}, false)) return "Legendary";
-                return "";
+                if (loot->HasKeywordInArray(std::vector<BGSKeyword*> {ArtifactKywd}, false)) return RarityType::Artifact;
+                if (loot->HasKeywordInArray(std::vector<BGSKeyword*> {LegendaryKywd}, false)) return RarityType::Legendary;
+                if (loot->HasKeywordInArray(std::vector<BGSKeyword*> {EpicKywd}, false)) return RarityType::Epic;
+                if (loot->HasKeywordInArray(std::vector<BGSKeyword*> {RareKywd}, false)) return RarityType::Rare;
+                if (loot->HasKeywordInArray(std::vector<BGSKeyword*> {UncommonKywd}, false)) return RarityType::Uncommon;
+                if (loot->HasKeywordInArray(std::vector<BGSKeyword*> {CommonKywd}, false)) return RarityType::Common;
+                return RarityType::None;
             }
 
         private:
@@ -64,12 +78,14 @@ namespace LootSpillage
             static inline Shader* RareShader;
             static inline Shader* EpicShader;
             static inline Shader* LegendaryShader;
+            static inline Shader* ArtifactShader;
             static inline std::vector<BGSKeyword*> ValuableKeywords;
             static inline BGSKeyword* CommonKywd;
             static inline BGSKeyword* UncommonKywd;
             static inline BGSKeyword* RareKywd;
             static inline BGSKeyword* EpicKywd;
             static inline BGSKeyword* LegendaryKywd;
+            static inline BGSKeyword* ArtifactKywd;
             static inline float Duration;
             static inline float Delay;
     };
