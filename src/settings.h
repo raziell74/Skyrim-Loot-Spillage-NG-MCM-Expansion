@@ -42,6 +42,13 @@ namespace LootSpillage
                 uint32_t ArmorColor = 0x02e5fa;
                 uint32_t ConsumableColor = 0x02fa8b;
                 uint32_t ValuableColor = 0xfad502;
+
+                float GearShaderMode = 1.0f;
+                uint32_t CommonColor = 0xAEB7C4;
+                uint32_t UncommonColor = 0x38275;
+                uint32_t RareColor = 0x5470C2;
+                uint32_t EpicColor = 0x5A4190;
+                uint32_t LegendaryColor = 0xCC8F58;
             };
 
             struct CleanUp
@@ -153,16 +160,45 @@ namespace LootSpillage
                 ShaderOptions.ApplyDelay = ApplyDelay->value;
 
                 TESGlobal* BaseColor = FormUtil::Form::GetFormFromMod("LootSpillageMCM.esp", 0x80E)->As<TESGlobal>();
-                TESGlobal* WeaponColor = FormUtil::Form::GetFormFromMod("LootSpillageMCM.esp", 0x80F)->As<TESGlobal>();
-                TESGlobal* ArmorColor = FormUtil::Form::GetFormFromMod("LootSpillageMCM.esp", 0x810)->As<TESGlobal>();
                 TESGlobal* ConsumableColor = FormUtil::Form::GetFormFromMod("LootSpillageMCM.esp", 0x811)->As<TESGlobal>();
                 TESGlobal* ValuableColor = FormUtil::Form::GetFormFromMod("LootSpillageMCM.esp", 0x812)->As<TESGlobal>();
 
+                TESGlobal* GearShaderMode = FormUtil::Form::GetFormFromMod("LootSpillageMCM.esp", 0x823)->As<TESGlobal>();
+                TESGlobal* CommonColor = FormUtil::Form::GetFormFromMod("LootSpillageMCM.esp", 0x824)->As<TESGlobal>();
+                TESGlobal* UncommonColor = FormUtil::Form::GetFormFromMod("LootSpillageMCM.esp", 0x825)->As<TESGlobal>();
+                TESGlobal* RareColor = FormUtil::Form::GetFormFromMod("LootSpillageMCM.esp", 0x826)->As<TESGlobal>();
+                TESGlobal* EpicColor = FormUtil::Form::GetFormFromMod("LootSpillageMCM.esp", 0x827)->As<TESGlobal>();
+                TESGlobal* LegendaryColor = FormUtil::Form::GetFormFromMod("LootSpillageMCM.esp", 0x828)->As<TESGlobal>();
+
+                TESGlobal* WeaponColor = FormUtil::Form::GetFormFromMod("LootSpillageMCM.esp", 0x80F)->As<TESGlobal>();
+                TESGlobal* ArmorColor = FormUtil::Form::GetFormFromMod("LootSpillageMCM.esp", 0x810)->As<TESGlobal>();
+
                 ShaderOptions.BaseColor = (uint32_t)BaseColor->value;
-                ShaderOptions.ArmorColor = (uint32_t)ArmorColor->value;
-                ShaderOptions.WeaponColor = (uint32_t)WeaponColor->value;
                 ShaderOptions.ConsumableColor = (uint32_t)ConsumableColor->value;
                 ShaderOptions.ValuableColor = (uint32_t)ValuableColor->value;
+
+                ShaderOptions.GearShaderMode = GearShaderMode->value;
+                ShaderOptions.CommonColor = (uint32_t)CommonColor->value;
+                ShaderOptions.UncommonColor = (uint32_t)UncommonColor->value;
+                ShaderOptions.RareColor = (uint32_t)RareColor->value;
+                ShaderOptions.EpicColor = (uint32_t)EpicColor->value;
+                ShaderOptions.LegendaryColor = (uint32_t)LegendaryColor->value;
+
+                ShaderOptions.ArmorColor = (uint32_t)ArmorColor->value;
+                ShaderOptions.WeaponColor = (uint32_t)WeaponColor->value;
+
+                // [v44] LS_GearShaderMode [GLOB:FE001823]
+                // [v44] LS_CommonColor [GLOB:FE001824]
+                // [v44] LS_UncommonColor [GLOB:FE001825]
+                // [v44] LS_RareColor [GLOB:FE001826]
+                // [v44] LS_EpicColor [GLOB:FE001827]
+                // [v44] LS_LegendaryColor [GLOB:FE001828]
+
+                // [v44] LS_CommonLoot [KYWD:FE00181E]
+                // [v44] LS_UncommonLoot [KYWD:FE00181F]
+                // [v44] LS_RareLoot [KYWD:FE001820]
+                // [v44] LS_EpicLoot [KYWD:FE001821]
+                // [v44] LS_LegendaryLoot [KYWD:FE001822]
 
                 SKSE::log::info("Settings Override from MCM");
                 SKSE::log::info(
@@ -267,6 +303,18 @@ namespace LootSpillage
             [[nodiscard]] static Color GetConsumableShaderColor() { return Color(ShaderOptions.ConsumableColor); }
 
             [[nodiscard]] static Color GetValuableShaderColor() { return Color(ShaderOptions.ValuableColor); }
+
+            [[nodiscard]] static float GetGearShaderMode() { return ShaderOptions.GearShaderMode; }
+
+            [[nodiscard]] static Color GetCommonShaderColor() { return Color(ShaderOptions.CommonColor); }
+
+            [[nodiscard]] static Color GetUncommonShaderColor() { return Color(ShaderOptions.UncommonColor); }
+
+            [[nodiscard]] static Color GetRareShaderColor() { return Color(ShaderOptions.RareColor); }
+
+            [[nodiscard]] static Color GetEpicShaderColor() { return Color(ShaderOptions.EpicColor); }
+
+            [[nodiscard]] static Color GetLegendaryShaderColor() { return Color(ShaderOptions.LegendaryColor); }
 
             [[nodiscard]] static float GetLootLifeTime() { return CleanUpOptions.LootLifeTime; }
 
