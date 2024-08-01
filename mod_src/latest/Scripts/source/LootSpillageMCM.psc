@@ -22,17 +22,41 @@ GlobalVariable Property VfxDuration Auto
 GlobalVariable Property VfxFallOff Auto
 
 GlobalVariable Property BaseColor Auto
-GlobalVariable Property WeaponColor Auto
-GlobalVariable Property ArmorColor Auto
 GlobalVariable Property ConsumableColor Auto
 GlobalVariable Property ValuableColor Auto
+
+GlobalVariable Property GearShaderMode Auto
+GlobalVariable Property CommonColor Auto
+GlobalVariable Property UncommonColor Auto
+GlobalVariable Property RareColor Auto
+GlobalVariable Property EpicColor Auto
+GlobalVariable Property LegendaryColor Auto
+GlobalVariable Property ArtifactColor Auto
+GlobalVariable Property WeaponColor Auto
+GlobalVariable Property ArmorColor Auto
+
+GlobalVariable Property LootLifeTime Auto
+GlobalVariable Property CleanUpMode Auto
+
+ObjectReference Property CleanUpContainer Auto
+FormList Property SpilledLootList Auto
+Actor property PlayerRef auto
+Perk property PlayerLootMonitorPerk auto
 
 ;--- Private Variables ----------------------------------------------------
 Bool migrated = False
 String plugin = "LootSpillageMCM.esp"
-Actor player
 
 ;--- Functions ------------------------------------------------------------
+
+Function OpenCleanUpChest()
+    UI.InvokeString("HUD Menu", "_global.skse.CloseMenu", "Journal Menu")
+	utility.wait(0.1)
+
+    CleanUpContainer.Activate(PlayerRef)
+EndFunction
+
+;--- MCM Helper ------------------------------------------------------------
 
 ; Returns version of this script.
 Int Function GetVersion()
@@ -69,6 +93,31 @@ Event OnGameReload()
         VerboseMessage("OnGameReload: Settings autoloaded!")
     EndIf
 
+    int vfxControl = GetModSettingInt("iVfxControl:Shaders")
+    int gearShadeBy = GetModSettingInt("iGearShadeBy:Shaders")
+    If vfxControl == 0 ; Disable
+        VfxDuration.SetValue(0.0)
+    ElseIf vfxControl == 1 ; Fade After Duration
+        VfxDuration.SetValue(GetModSettingFloat("fVfxDuration:Shaders") as Float)
+        If gearShadeBy == 0 ; Rarity
+            SetModSettingInt("iShowRarityColors:Shaders", 1)
+        Else ; Type
+            SetModSettingInt("iShowRarityColors:Shaders", 0)
+        EndIf
+    ElseIf vfxControl == 2 ; Never Fade
+        If gearShadeBy == 0 ; Rarity
+            SetModSettingInt("iShowRarityColors:Shaders", 1)
+        Else ; Type
+            SetModSettingInt("iShowRarityColors:Shaders", 0)
+        EndIf
+        VfxDuration.SetValue(-1.0)
+    EndIf
+
+    If PlayerRef.HasPerk(PlayerLootMonitorPerk) == FALSE
+        PlayerRef.AddPerk(PlayerLootMonitorPerk)
+    EndIf
+
+    Utility.Wait(0.5)
     UpdateLootSpillageSettings()
 EndEvent
 
@@ -142,12 +191,28 @@ Event OnSettingChange(String a_ID)
         If vfxControl == 0 ; Disable
             SetModSettingInt("iShowVfxDuration:Shaders", 0)
             VfxDuration.SetValue(0.0)
+            SetModSettingInt("iShowRarityColors:Shaders", 0)
+            ForcePageReset()
         ElseIf vfxControl == 1 ; Fade After Duration
             SetModSettingInt("iShowVfxDuration:Shaders", 1)
             VfxDuration.SetValue(GetModSettingFloat("fVfxDuration:Shaders") as Float)
+            int gearShadeBy = GetModSettingInt("iGearShadeBy:Shaders")
+            If gearShadeBy == 0 ; Rarity
+                SetModSettingInt("iShowRarityColors:Shaders", 1)
+            Else ; Type
+                SetModSettingInt("iShowRarityColors:Shaders", 0)
+            EndIf
+            ForcePageReset()
         ElseIf vfxControl == 2 ; Never Fade
             SetModSettingInt("iShowVfxDuration:Shaders", 0)
             VfxDuration.SetValue(-1.0)
+            int gearShadeBy = GetModSettingInt("iGearShadeBy:Shaders")
+            If gearShadeBy == 0 ; Rarity
+                SetModSettingInt("iShowRarityColors:Shaders", 1)
+            Else ; Type
+                SetModSettingInt("iShowRarityColors:Shaders", 0)
+            EndIf
+            ForcePageReset()
         EndIf
         RefreshMenu()
     ElseIf a_ID == "iApplyDelay:Shaders"
@@ -163,8 +228,8 @@ Event OnSettingChange(String a_ID)
     ElseIf a_ID == "iBaseColor:Shaders"
         ;Debug.MessageBox("Color Test - " + GetModSettingInt("iBaseColor:Shaders"))
         BaseColor.SetValue(GetModSettingInt("iBaseColor:Shaders") as Float)
-        MiscUtil.PrintConsole("Loot Spillage: BaseColor ModSetting: " + GetModSettingInt("iBaseColor:Shaders"))
-        MiscUtil.PrintConsole("Loot Spillage: BaseColor Global: " + BaseColor.GetValue() as Int)
+        ;MiscUtil.PrintConsole("Loot Spillage: BaseColor ModSetting: " + GetModSettingInt("iBaseColor:Shaders"))
+        ;MiscUtil.PrintConsole("Loot Spillage: BaseColor Global: " + BaseColor.GetValue() as Int)
     ElseIf a_ID == "iWeaponColor:Shaders"
         ;Debug.MessageBox("Color Test - " + GetModSettingInt("iWeaponColor:Shaders"))
         WeaponColor.SetValue(GetModSettingInt("iWeaponColor:Shaders") as Float)
@@ -177,6 +242,36 @@ Event OnSettingChange(String a_ID)
     ElseIf a_ID == "iValuableColor:Shaders"
         ;Debug.MessageBox("Color Test - " + GetModSettingInt("iValuableColor:Shaders"))
         ValuableColor.SetValue(GetModSettingInt("iValuableColor:Shaders") as Float)
+    ElseIf a_ID == "iGearShadeBy:Shaders"
+        int gearShadeBy = GetModSettingInt("iGearShadeBy:Shaders")
+        If gearShadeBy == 0 ; Rarity
+            SetModSettingInt("iShowRarityColors:Shaders", 1)
+        Else ; Type
+            SetModSettingInt("iShowRarityColors:Shaders", 0)
+        EndIf
+        GearShaderMode.SetValue(gearShadeBy as Float)
+        ForcePageReset()
+    ElseIf a_ID == "iCommonColor:Shaders"
+        ;Debug.MessageBox("Color Test - " + GetModSettingInt("iCommonColor:Shaders"))
+        CommonColor.SetValue(GetModSettingInt("iCommonColor:Shaders") as Float)
+    ElseIf a_ID == "iUncommonColor:Shaders"
+        ;Debug.MessageBox("Color Test - " + GetModSettingInt("iUncommonColor:Shaders"))
+        UncommonColor.SetValue(GetModSettingInt("iUncommonColor:Shaders") as Float)
+    ElseIf a_ID == "iRareColor:Shaders"
+        ;Debug.MessageBox("Color Test - " + GetModSettingInt("iRareColor:Shaders"))
+        RareColor.SetValue(GetModSettingInt("iRareColor:Shaders") as Float)
+    ElseIf a_ID == "iEpicColor:Shaders"
+        ;Debug.MessageBox("Color Test - " + GetModSettingInt("iEpicColor:Shaders"))
+        EpicColor.SetValue(GetModSettingInt("iEpicColor:Shaders") as Float)
+    ElseIf a_ID == "iLegendaryColor:Shaders"
+        ;Debug.MessageBox("Color Test - " + GetModSettingInt("iLegendaryColor:Shaders"))
+        LegendaryColor.SetValue(GetModSettingInt("iLegendaryColor:Shaders") as Float)
+    ElseIf a_ID == "iArtifactColor:Shaders"
+        ;Debug.MessageBox("Color Test - " + GetModSettingInt("iArtifactColor:Shaders"))
+        ArtifactColor.SetValue(GetModSettingInt("iArtifactColor:Shaders") as Float)
+        
+    ElseIf a_ID == "iCleanUpMode:Maintenance"
+        CleanUpMode.SetValue(GetModSettingInt("iCleanUpMode:Maintenance") as Float)
     EndIf
 
     UpdateLootSpillageSettings()
@@ -207,6 +302,17 @@ Function Default()
     SetModSettingInt("iArmorColor:Shaders", 0x4F2D7F)
     SetModSettingInt("iConsumableColor:Shaders", 0x008542)
     SetModSettingInt("iValuableColor:Shaders", 0xEAAB00)
+    
+    SetModSettingInt("iGearShadeBy:Shaders", 1)
+    SetModSettingInt("iShowRarityColors:Shaders", 0)
+    SetModSettingInt("iCommonColor:Shaders", 0x999999)
+    SetModSettingInt("iUncommonColor:Shaders", 0x8542)
+    SetModSettingInt("iRareColor:Shaders", 0x162274)
+    SetModSettingInt("iEpicColor:Shaders", 0x4F2D7F)
+    SetModSettingInt("iLegendaryColor:Shaders", 0xBD4F19)
+    SetModSettingInt("iArtifactColor:Shaders", 0xAD0073)
+
+    SetModSettingInt("iCleanUpMode:Maintenance", 0)
     
     SetModSettingBool("bEnabled:Maintenance", True)
     SetModSettingInt("iLoadingDelay:Maintenance", 0)
@@ -242,27 +348,53 @@ Function Load()
 
     ApplyDelay.SetValue(GetModSettingInt("iApplyDelay:Shaders") as Float)
     int vfxControl = GetModSettingInt("iVfxControl:Shaders")
+    int gearShadeBy = GetModSettingInt("iGearShadeBy:Shaders")
     If vfxControl == 0 ; Disable
         VfxDuration.SetValue(0.0)
     ElseIf vfxControl == 1 ; Fade After Duration
         VfxDuration.SetValue(GetModSettingFloat("fVfxDuration:Shaders") as Float)
+        If gearShadeBy == 0 ; Rarity
+            SetModSettingInt("iShowRarityColors:Shaders", 1)
+        Else ; Type
+            SetModSettingInt("iShowRarityColors:Shaders", 0)
+        EndIf
     ElseIf vfxControl == 2 ; Never Fade
+        If gearShadeBy == 0 ; Rarity
+            SetModSettingInt("iShowRarityColors:Shaders", 1)
+        Else ; Type
+            SetModSettingInt("iShowRarityColors:Shaders", 0)
+        EndIf
         VfxDuration.SetValue(-1.0)
     EndIf
     VfxFallOff.SetValue(GetModSettingFloat("fVfxFallOff:Shaders") as Float)
 
     BaseColor.SetValue(GetModSettingInt("iBaseColor:Shaders") as Float)
-    WeaponColor.SetValue(GetModSettingInt("iWeaponColor:Shaders") as Float)
-    ArmorColor.SetValue(GetModSettingInt("iArmorColor:Shaders") as Float)
     ConsumableColor.SetValue(GetModSettingInt("iConsumableColor:Shaders") as Float)
     ValuableColor.SetValue(GetModSettingInt("iValuableColor:Shaders") as Float)
+    CleanUpMode.SetValue(GetModSettingInt("iCleanUpMode:Maintenance") as Float)
+
+    GearShaderMode.SetValue(gearShadeBy as Float)
+    CommonColor.SetValue(GetModSettingInt("iCommonColor:Shaders") as Float)
+    UncommonColor.SetValue(GetModSettingInt("iUncommonColor:Shaders") as Float)
+    RareColor.SetValue(GetModSettingInt("iRareColor:Shaders") as Float)
+    EpicColor.SetValue(GetModSettingInt("iEpicColor:Shaders") as Float)
+    LegendaryColor.SetValue(GetModSettingInt("iLegendaryColor:Shaders") as Float)
+    ArtifactColor.SetValue(GetModSettingInt("iArtifactColor:Shaders") as Float)
+    WeaponColor.SetValue(GetModSettingInt("iWeaponColor:Shaders") as Float)
+    ArmorColor.SetValue(GetModSettingInt("iArmorColor:Shaders") as Float)
 
     UpdateLootSpillageSettings()
     VerboseMessage("Settings applied!")
 
     ; Testing to see if this fixes the mod displaying incorrect colors after game reload
-    MiscUtil.PrintConsole("Loot Spillage: BaseColor ModSetting: " + GetModSettingInt("iBaseColor:Shaders"))
-    MiscUtil.PrintConsole("Loot Spillage: BaseColor Global: " + BaseColor.GetValue() as Int)
+    ;MiscUtil.PrintConsole("Loot Spillage: BaseColor ModSetting: " + GetModSettingInt("iBaseColor:Shaders"))
+    ;MiscUtil.PrintConsole("Loot Spillage: BaseColor Global: " + BaseColor.GetValue() as Int)
+
+    MiscUtil.PrintConsole("Loot Spillage: GearShaderMode ModSetting: " + gearShadeBy as Float)
+    MiscUtil.PrintConsole("Loot Spillage: iShowRarityColors ModSetting: " + GetModSettingInt("iShowRarityColors:Shaders"))
+
+    Utility.Wait(0.5)
+    UpdateLootSpillageSettings()
 EndFunction
 
 Function LoadSettings()
@@ -303,10 +435,21 @@ Function MigrateToMCMHelper()
     SetModSettingFloat("fVfxFallOff:Shaders", VfxFallOff.GetValue())
 
     SetModSettingInt("iBaseColor:Shaders", BaseColor.GetValue() as Int)
-    SetModSettingInt("iWeaponColor:Shaders", WeaponColor.GetValue() as Int)
-    SetModSettingInt("iArmorColor:Shaders", ArmorColor.GetValue() as Int)
     SetModSettingInt("iConsumableColor:Shaders", ConsumableColor.GetValue() as Int)
     SetModSettingInt("iValuableColor:Shaders", ValuableColor.GetValue() as Int)
+
+    SetModSettingInt("iGearShadeBy:Shaders", GearShaderMode.GetValue() as Int)
+    SetModSettingInt("iCommonColor:Shaders", CommonColor.GetValue() as Int)
+    SetModSettingInt("iUncommonColor:Shaders", UncommonColor.GetValue() as Int)
+    SetModSettingInt("iRareColor:Shaders", RareColor.GetValue() as Int)
+    SetModSettingInt("iEpicColor:Shaders", EpicColor.GetValue() as Int)
+    SetModSettingInt("iLegendaryColor:Shaders", LegendaryColor.GetValue() as Int)
+    SetModSettingInt("iArtifactColor:Shaders", ArtifactColor.GetValue() as Int)
+
+    SetModSettingInt("iWeaponColor:Shaders", WeaponColor.GetValue() as Int)
+    SetModSettingInt("iArmorColor:Shaders", ArmorColor.GetValue() as Int)
+
+    SetModSettingInt("iCleanUpMode:Maintenance", CleanUpMode.GetValue() as Int)
 
     UpdateLootSpillageSettings()
 EndFunction

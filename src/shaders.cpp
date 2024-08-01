@@ -18,11 +18,12 @@ namespace LootSpillage
         LegendaryShader = FormUtil::Form::GetFormFromMod("LootSpillageMCM.esp", 0x82D)->As<TESEffectShader>();
         ArtifactShader = FormUtil::Form::GetFormFromMod("LootSpillageMCM.esp", 0x82E)->As<TESEffectShader>();
         
-        CommonKywd = FormUtil::Form::GetFormFromMod("LootSpillageMCM.esp", 0x81E)->As<BGSKeyword>();
-        UncommonKywd = FormUtil::Form::GetFormFromMod("LootSpillageMCM.esp", 0x81F)->As<BGSKeyword>();
-        RareKywd = FormUtil::Form::GetFormFromMod("LootSpillageMCM.esp", 0x820)->As<BGSKeyword>();
-        EpicKywd = FormUtil::Form::GetFormFromMod("LootSpillageMCM.esp", 0x821)->As<BGSKeyword>();
-        LegendaryKywd = FormUtil::Form::GetFormFromMod("LootSpillageMCM.esp", 0x830)->As<BGSKeyword>();
+        CommonKywd.emplace_back(FormUtil::Form::GetFormFromMod("LootSpillageMCM.esp", 0x81E)->As<BGSKeyword>());
+        UncommonKywd.emplace_back(FormUtil::Form::GetFormFromMod("LootSpillageMCM.esp", 0x81F)->As<BGSKeyword>());
+        RareKywd.emplace_back(FormUtil::Form::GetFormFromMod("LootSpillageMCM.esp", 0x820)->As<BGSKeyword>());
+        EpicKywd.emplace_back(FormUtil::Form::GetFormFromMod("LootSpillageMCM.esp", 0x821)->As<BGSKeyword>());
+        LegendaryKywd.emplace_back(FormUtil::Form::GetFormFromMod("LootSpillageMCM.esp", 0x822)->As<BGSKeyword>());
+        ArtifactKywd.emplace_back(FormUtil::Form::GetFormFromMod("LootSpillageMCM.esp", 0x830)->As<BGSKeyword>());
     }
 
     void LootShaders::Configure()
@@ -126,8 +127,8 @@ namespace LootSpillage
                     shaderType = "ArmorShader";
                 } else {
                     rarity = LootShaders::GetRarity(refr);
-                    shader = LootShaders::GetRarityShader(rarity, baseFormType);
-                    shaderType = "ArmorShader";
+                    shader = LootShaders::GetRarityShader(rarity);
+                    shaderType = LootShaders::GetRarityString(rarity) + "Shader";
                 }
                 break;
             case FormType::Weapon:
@@ -136,8 +137,8 @@ namespace LootSpillage
                     shaderType = "WeaponShader";
                 } else {
                     rarity = LootShaders::GetRarity(refr);
-                    shader = LootShaders::GetRarityShader(rarity, baseFormType);
-                    shaderType = "WeaponShader";
+                    shader = LootShaders::GetRarityShader(rarity);
+                    shaderType = LootShaders::GetRarityString(rarity) + "Shader";
                 }
                 break; 
             case FormType::KeyMaster:

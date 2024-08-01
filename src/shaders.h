@@ -35,7 +35,7 @@ namespace LootSpillage
         
             static void ApplyLootShader(TESObjectREFR* refr);
 
-            [[nodiscard]] static Shader* GetRarityShader(RarityType rarity, FormType formType) {
+            [[nodiscard]] static Shader* GetRarityShader(RarityType rarity) {
                 if (rarity == RarityType::Common) return CommonShader;
                 if (rarity == RarityType::Uncommon) return UncommonShader;
                 if (rarity == RarityType::Rare) return RareShader;
@@ -59,6 +59,16 @@ namespace LootSpillage
                 return RarityType::None;
             }
 
+            [[nodiscard]] static std::string GetRarityString(RarityType rarity) {
+                if (rarity == RarityType::Common) return "Common";
+                if (rarity == RarityType::Uncommon) return "Uncommon";
+                if (rarity == RarityType::Rare) return "Rare";
+                if (rarity == RarityType::Epic) return "Epic";
+                if (rarity == RarityType::Legendary) return "Legendary";
+                if (rarity == RarityType::Artifact) return "Artifact";
+                return "Base";
+            }
+
         private:
 
             using Lock = std::shared_mutex;
@@ -80,12 +90,12 @@ namespace LootSpillage
             static inline Shader* LegendaryShader;
             static inline Shader* ArtifactShader;
             static inline std::vector<BGSKeyword*> ValuableKeywords;
-            static inline BGSKeyword* CommonKywd;
-            static inline BGSKeyword* UncommonKywd;
-            static inline BGSKeyword* RareKywd;
-            static inline BGSKeyword* EpicKywd;
-            static inline BGSKeyword* LegendaryKywd;
-            static inline BGSKeyword* ArtifactKywd;
+            static inline std::vector<BGSKeyword*> CommonKywd;
+            static inline std::vector<BGSKeyword*> UncommonKywd;
+            static inline std::vector<BGSKeyword*> RareKywd;
+            static inline std::vector<BGSKeyword*> EpicKywd;
+            static inline std::vector<BGSKeyword*> LegendaryKywd;
+            static inline std::vector<BGSKeyword*> ArtifactKywd;
             static inline float Duration;
             static inline float Delay;
     };

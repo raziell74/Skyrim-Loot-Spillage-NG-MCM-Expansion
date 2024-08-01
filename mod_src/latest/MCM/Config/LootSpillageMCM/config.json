@@ -214,7 +214,7 @@
                         "sourceType": "ModSettingFloat",
                         "defaultValue": 15.0
                     },
-                    "groupCondition": 3
+                    "groupCondition": {"AND": [2, 3]}
                 },
                 {
                     "id": "fVfxFallOff:Shaders",
@@ -234,32 +234,13 @@
                 {
                     "type": "header",
                     "text": "$LS_Shader_Colors_Header",
-                    "position": 1
+                    "position": 1,
+                    "groupCondition": 2
                 },
                 {
                     "id": "iBaseColor:Shaders",
                     "text": "$LS_BaseColor",
                     "help": "$LS_BaseColor_Help",
-                    "type": "color",
-                    "valueOptions": {
-                        "sourceType": "ModSettingInt"
-                    },
-                    "groupCondition": 2
-                },
-                {
-                    "id": "iWeaponColor:Shaders",
-                    "text": "$LS_WeaponColor",
-                    "help": "$LS_WeaponColor_Help",
-                    "type": "color",
-                    "valueOptions": {
-                        "sourceType": "ModSettingInt"
-                    },
-                    "groupCondition": 2
-                },
-                {
-                    "id": "iArmorColor:Shaders",
-                    "text": "$LS_ArmorColor",
-                    "help": "$LS_ArmorColor_Help",
                     "type": "color",
                     "valueOptions": {
                         "sourceType": "ModSettingInt"
@@ -285,6 +266,126 @@
                         "sourceType": "ModSettingInt"
                     },
                     "groupCondition": 2
+                },
+                {
+                    "type": "empty"
+                },
+                {
+                    "type": "header",
+                    "text": "Equipment Shaders"
+                },
+                {
+                    "id": "iGearShadeBy:Shaders",
+                    "type": "enum",
+                    "text": "$LS_GearShadeBy",
+                    "help": "$LS_GearShadeBy_Help",
+                    "groupControl": 4,
+                    "valueOptions": {
+                        "options": [
+                            "$LS_GearShadeBy_Rarity_ENUM",
+                            "$LS_GearShadeBy_Type_ENUM"
+                        ],
+                        "sourceType": "ModSettingInt",
+                        "defaultValue": 1
+                    },
+                    "groupCondition": 2
+                },
+                {
+                    "id": "iShowRarityColors:Shaders",
+                    "type": "hiddenToggle",
+                    "valueOptions": {
+                      "sourceType": "ModSettingInt",
+                      "defaultValue": 0
+                    },
+                    "groupControl": 5
+                },
+                {
+                    "id": "iCommonColor:Shaders",
+                    "text": "$LS_CommonColor",
+                    "help": "$LS_CommonColor_Help",
+                    "type": "color",
+                    "valueOptions": {
+                        "sourceType": "ModSettingInt"
+                    },
+                    "groupCondition": 5,
+                    "groupBehavior": "skip"
+                },
+                {
+                    "id": "iUncommonColor:Shaders",
+                    "text": "$LS_UncommonColor",
+                    "help": "$LS_UncommonColor_Help",
+                    "type": "color",
+                    "valueOptions": {
+                        "sourceType": "ModSettingInt"
+                    },
+                    "groupCondition": 5,
+                    "groupBehavior": "skip"
+                },
+                {
+                    "id": "iRareColor:Shaders",
+                    "text": "$LS_RareColor",
+                    "help": "$LS_RareColor_Help",
+                    "type": "color",
+                    "valueOptions": {
+                        "sourceType": "ModSettingInt"
+                    },
+                    "groupCondition": 5,
+                    "groupBehavior": "skip"
+                },
+                {
+                    "id": "iEpicColor:Shaders",
+                    "text": "$LS_EpicColor",
+                    "help": "$LS_EpicColor_Help",
+                    "type": "color",
+                    "valueOptions": {
+                        "sourceType": "ModSettingInt"
+                    },
+                    "groupCondition": 5,
+                    "groupBehavior": "skip"
+                },
+                {
+                    "id": "iLegendaryColor:Shaders",
+                    "text": "$LS_LegendaryColor",
+                    "help": "$LS_LegendaryColor_Help",
+                    "type": "color",
+                    "valueOptions": {
+                        "sourceType": "ModSettingInt"
+                    },
+                    "groupCondition": 5,
+                    "groupBehavior": "skip"
+                },
+                {
+                    "id": "iArtifactColor:Shaders",
+                    "text": "$LS_ArtifactColor",
+                    "help": "$LS_ArtifactColor_Help",
+                    "type": "color",
+                    "valueOptions": {
+                        "sourceType": "ModSettingInt"
+                    },
+                    "groupCondition": 5,
+                    "groupBehavior": "skip"
+                },
+                {
+                    "id": "iWeaponColor:Shaders",
+                    "text": "$LS_WeaponColor",
+                    "help": "$LS_WeaponColor_Help",
+                    "type": "color",
+                    "valueOptions": {
+                        "sourceType": "ModSettingInt"
+                    },
+                    "groupCondition": {"AND": [2, {"NOT": 5}]},
+                    "groupBehavior": "skip"
+                },
+                {
+                    "id": "iArmorColor:Shaders",
+                    "text": "$LS_ArmorColor",
+                    "help": "$LS_ArmorColor_Help",
+                    "type": "color",
+                    "valueOptions": {
+                        "sourceType": "ModSettingInt"
+                    },
+                    "groupCondition": {"AND": [2, {"NOT": 5}]},
+                    "groupBehavior": "skip"
                 }
             ]
         },
@@ -366,6 +467,36 @@
                     "valueOptions": {
                         "sourceType": "ModSettingBool",
                         "defaultValue": true
+                    }
+                },
+                {
+                    "type": "header",
+                    "text": "$LS_CleanUp_Header",
+                    "position": 1
+                },
+                {
+                    "id": "iCleanUpMode:Maintenance",
+                    "type": "enum",
+                    "text": "$LS_CleanUpMode",
+                    "help": "$LS_CleanUpMode_Help",
+                    "valueOptions": {
+                      "options": [
+                        "$LS_Clean_WithResetContainer_ENUM",
+                        "$LS_Clean_OnCellDetach_ENUM",
+                        "$LS_DontClean_ENUM"
+                      ],
+                      "sourceType": "ModSettingInt",
+                      "defaultValue": 0
+                    }
+                },
+                {
+                    "id": "sViewCleanUpChest:Maintenance",
+                    "type": "text",
+                    "text": "",
+                    "help": "$LS_ViewCleanUpChest_Help",
+                    "action": {
+                        "type": "CallFunction",
+                        "function": "OpenCleanUpChest"
                     }
                 }
             ]

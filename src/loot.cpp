@@ -135,24 +135,20 @@ namespace LootSpillage
             return;
         }
 
-        auto* baseObject = refr->GetBaseObject();
-        if (!baseObject) return;
-
-        switch(baseObject->GetFormType())
-        {
-            case FormType::AlchemyItem:
-            case FormType::Ingredient:
-            case FormType::Armor:
-            case FormType::Weapon:
-            case FormType::KeyMaster:
-                break;
-            default: // Do not clean anything that's not a consumable, armor, weapon, or valuable
-                SKSE::log::info("None Droppable Form discovered in DroppedLootList {} [0x{:X}] from SpilledLootList", refr->GetName(), formId);
-                return;
-        }
-
         BSTArray<FormID>*  scriptAddedTempForms = DroppedLootList->scriptAddedTempForms;
         if (scriptAddedTempForms->empty()) return;
+
+        // Debug output for the DroppedLootList
+        SKSE::log::info("DroppedLootList has {} script added forms", DroppedLootList->scriptAddedFormCount);
+        std::uint32_t debugi = 0;
+        std::uint32_t debugcount = scriptAddedTempForms->size();
+        for (debugi = 0; debugi < debugcount; debugi++) {
+            if (formId == scriptAddedTempForms->operator[](debugi)) {
+                if (!refr) break;
+                SKSE::log::info("Refr FormID {} [0x{:X}] found in scriptAddedTempForms at operator index {}, temp formId is [0x{:X}] in the list", refr->GetName(), formId, debugi, scriptAddedTempForms->operator[](debugi));
+                break;
+            }
+        }
         
         // Release from the DroppedLootList to free up memory and prevent larger loops when checking HasForm
         std::uint32_t i = 0;
@@ -164,6 +160,24 @@ namespace LootSpillage
                 SKSE::log::info("Removed Form {} [0x{:X}] from SpilledLootList", refr->GetName(), formId);
                 break;
             }
+        }
+
+        auto* baseObject = refr->GetBaseObject();
+        if (!baseObject) {
+            SKSE::log::info("BaseObject is null for {} [0x{:X}]", refr->GetName(), formId);
+            return;
+        }
+
+        switch(baseObject->GetFormType())
+        {
+            case FormType::AlchemyItem:
+            case FormType::Ingredient:
+            case FormType::Armor:
+            case FormType::Weapon:
+                break;
+            default: // Do not clean anything that's not a consumable, armor, weapon, or valuable
+                SKSE::log::info("None Droppable Form discovered in DroppedLootList {} [0x{:X}] from SpilledLootList", refr->GetName(), formId);
+                return;
         }
 
         if (cleanUpMode == 1) { // Immediate cleanup on cell detach

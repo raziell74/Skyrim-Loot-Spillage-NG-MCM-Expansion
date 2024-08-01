@@ -190,23 +190,6 @@ namespace LootSpillage
                 ShaderOptions.ArmorColor = (uint32_t)ArmorColor->value;
                 ShaderOptions.WeaponColor = (uint32_t)WeaponColor->value;
 
-                // [v44] LS_GearShaderMode [GLOB:FE001823]
-                // [v44] LS_CommonColor [GLOB:FE001824]
-                // [v44] LS_UncommonColor [GLOB:FE001825]
-                // [v44] LS_RareColor [GLOB:FE001826]
-                // [v44] LS_EpicColor [GLOB:FE001827]
-                // [v44] LS_LegendaryColor [GLOB:FE001828]
-
-                // [v44] LS_CommonLoot [KYWD:FE00181E]
-                // [v44] LS_UncommonLoot [KYWD:FE00181F]
-                // [v44] LS_RareLoot [KYWD:FE001820]
-                // [v44] LS_EpicLoot [KYWD:FE001821]
-                // [v44] LS_LegendaryLoot [KYWD:FE001822]
-
-                // [v44] LS_ArtifactShader [EFSH:FE00182E]
-                // [v44] LS_ArtifactColor [GLOB:FE00182F]
-                // [v44] LS_ArtifactLoot [KYWD:FE001830]
-
                 SKSE::log::info("Settings Override from MCM");
                 SKSE::log::info(
                     "DropOptions | DropAll: {} | DropArmor: {} | DropWeapons: {} | DropOther: {} | DropLimit: {} | DropQuest: {} | AllowItemKeywordExclusion {}", 
