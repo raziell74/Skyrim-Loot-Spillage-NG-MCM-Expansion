@@ -29,6 +29,6 @@ namespace LootSpillage
             
             static inline BGSKeyword* DisableLootDropKYWD;
             
-            [[nodiscard]] static inline std::vector<std::pair<NiPointer<TESObjectREFR>, NiPointer<Actor>>> ActorSpillageMap;
+            static inline std::vector<std::pair<NiPointer<TESObjectREFR>, NiPointer<Actor>>> ActorSpillageMap = {};
     };
 }

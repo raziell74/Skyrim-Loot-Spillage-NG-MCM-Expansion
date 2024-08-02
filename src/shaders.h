@@ -69,6 +69,16 @@ namespace LootSpillage
                 return "Base";
             }
 
+             [[nodiscard]] static bool RarityShaderDisabled(RarityType rarity) {
+                if (rarity == RarityType::Common && Settings::GetCommonShaderColor() == 0) return true;
+                if (rarity == RarityType::Uncommon && Settings::GetUncommonShaderColor() == 0) return true;
+                if (rarity == RarityType::Rare && Settings::GetRareShaderColor() == 0) return true;
+                if (rarity == RarityType::Epic && Settings::GetEpicShaderColor() == 0) return true;
+                if (rarity == RarityType::Legendary && Settings::GetLegendaryShaderColor() == 0) return true;
+                if (rarity == RarityType::Artifact && Settings::GetArtifactShaderColor() == 0) return true;
+                return false;
+            }
+
         private:
 
             using Lock = std::shared_mutex;

@@ -114,44 +114,54 @@ namespace LootSpillage
         switch(baseFormType)
         {
             case FormType::AlchemyItem:
+                if (Settings::GetConsumableShaderColor() == 0) return; // Black shaders disable the shading (feature)
                 shader = ConsumableShader; 
                 shaderType = "ConsumableShader";
                 break;
             case FormType::Ingredient:
+                if (Settings::GetConsumableShaderColor() == 0) return; // Black shaders disable the shading (feature)
                 shader = ConsumableShader;
                 shaderType = "ConsumableShader";
                 break;
             case FormType::Armor:
                 if (gearShaderMode == 1.0f) {
+                    if (Settings::GetArmorShaderColor() == 0) return; // Black shaders disable the shading (feature)
                     shader = ArmorShader;
                     shaderType = "ArmorShader";
                 } else {
                     rarity = LootShaders::GetRarity(refr);
+                    if (LootShaders::RarityShaderDisabled(rarity)) return;
                     shader = LootShaders::GetRarityShader(rarity);
                     shaderType = LootShaders::GetRarityString(rarity) + "Shader";
                 }
                 break;
             case FormType::Weapon:
                 if (gearShaderMode == 1.0f) {
+                    if (Settings::GetWeaponShaderColor() == 0) return; // Black shaders disable the shading (feature)
                     shader = WeaponShader;
                     shaderType = "WeaponShader";
                 } else {
                     rarity = LootShaders::GetRarity(refr);
+                    if (LootShaders::RarityShaderDisabled(rarity)) return;
                     shader = LootShaders::GetRarityShader(rarity);
                     shaderType = LootShaders::GetRarityString(rarity) + "Shader";
                 }
                 break; 
             case FormType::KeyMaster:
+                if (Settings::GetValuableShaderColor() == 0) return; // Black shaders disable the shading (feature)
                 shader = ValuableShader;
                 shaderType = "ValuableShader";
                 break;
             default:
-                shader = BaseShader;
-                shaderType = "BaseShader";
-        }
-        if (baseObject->IsGold() || baseObject->IsSoulGem()) {
-            shader = ValuableShader;
-            shaderType = "ValuableShader";
+                if (baseObject->IsGold() || baseObject->IsSoulGem()) {
+                    if (Settings::GetValuableShaderColor() == 0) return; // Black shaders disable the shading (feature)
+                    shader = ValuableShader;
+                    shaderType = "ValuableShader";
+                } else {
+                    if (Settings::GetBaseShaderColor() == 0) return; // Black shaders disable the shading (feature)
+                    shader = BaseShader;
+                    shaderType = "BaseShader";
+                }
         }
 
         SKSE::log::info("Applying {} to {}", 
@@ -164,15 +174,5 @@ namespace LootSpillage
         } else {
             refr->ApplyEffectShader(shader, Duration);
         }
-
-        float cleanUpMode = Settings::GetCleanUpMode();
-        if (cleanUpMode == 2) { // Do not track loot for cleanup
-            return;
-        }
-
-        // Add the dropped ref formId to the DroppedLootList form list for later cleanup
-        BGSListForm* DroppedLootList = Settings::GetDroppedLootList();
-        SKSE::log::info("Adding {} {} [0x{:X}] to the DroppedLootList", refr->extraList.GetCount(), refr->GetName(), refr->GetFormID());
-        DroppedLootList->AddForm(refr);
     }
 }

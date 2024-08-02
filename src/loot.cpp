@@ -108,9 +108,17 @@ namespace LootSpillage
         // Remove owner so loot that somehow has an owner assigned to it can be picked up by anyone
         refr->extraList.SetOwner(nullptr);
 
-        // Add the actor and loot to the ActorSpillageMap in local memory
-        std::pair<TESObjectREFR*, Actor*> lootPair(refr, actor);
-        ActorSpillageMap.emplace_back(lootPair);
+        // Track loot for cleanup, if it's enabled
+        if (Settings::GetCleanUpMode() != 2) {
+            // Add the actor and loot to the ActorSpillageMap in local memory
+            std::pair<TESObjectREFR*, Actor*> lootPair(refr, actor);
+            ActorSpillageMap.emplace_back(lootPair);
+            
+            // Add the dropped ref formId to the DroppedLootList form list for later cleanup
+            BGSListForm* DroppedLootList = Settings::GetDroppedLootList();
+            SKSE::log::info("Adding {} {} [0x{:X}] to the DroppedLootList", refr->extraList.GetCount(), refr->GetName(), refr->GetFormID());
+            DroppedLootList->AddForm(refr);
+        }
 
         LootShaders::QueueLootShader(refr);
     }
@@ -152,6 +160,7 @@ namespace LootSpillage
         }
 
         BGSListForm* DroppedLootList = Settings::GetDroppedLootList();
+        if (!DroppedLootList) return;
         BSTArray<FormID>*  scriptAddedTempForms = DroppedLootList->scriptAddedTempForms;
 
         // If loot is in DroppedLootList but wasn't Continue with cleanup using the DropLootList
@@ -167,7 +176,7 @@ namespace LootSpillage
         for (i = 0; i < count; i++) {
             if (formId == scriptAddedTempForms->operator[](i)) {
                 scriptAddedTempForms->erase(scriptAddedTempForms->data() + i);
-                SKSE::log::info("Removed Form {} [0x{:X}] from SpilledLootList", refr->GetName(), formId);
+                SKSE::log::info("Removed Form {} [0x{:X}] from SpilledLootList at operator index {}", refr->GetName(), formId, i);
                 foundInList = true;
                 break;
             }
