@@ -108,6 +108,10 @@ namespace LootSpillage
         // Remove owner so loot that somehow has an owner assigned to it can be picked up by anyone
         refr->extraList.SetOwner(nullptr);
 
+        // Add the actor and loot to the ActorSpillageMap in local memory
+        std::pair<TESObjectREFR*, Actor*> lootPair(refr, actor);
+        ActorSpillageMap.emplace_back(lootPair);
+
         LootShaders::QueueLootShader(refr);
     }
     
@@ -116,51 +120,61 @@ namespace LootSpillage
         using InventoryDropMap = std::map<TESBoundObject*, std::pair<Count, std::vector<ObjectRefHandle>>>;
 
         float cleanUpMode = Settings::GetCleanUpMode();
-        if (cleanUpMode == 2) { // Do not clean loot
+        if (cleanUpMode == 2 || !refr) { // Do not clean loot
             return;
         }
 
-        BGSListForm* DroppedLootList = Settings::GetDroppedLootList();
-        if (!DroppedLootList || DroppedLootList->scriptAddedFormCount == 0) return;
-
-        if (!refr) return;
         FormID formId = refr->GetFormID();
-        if (!formId || !DroppedLootList->HasForm(formId)) {
-            return;
-        }
-        
-        if (!refr) return;
+        if (!formId) return;
+
         if (refr->IsHeadingMarker()) {
             SKSE::log::info("{} [0x{:X}] is a quest marker - skipping", refr->GetName(), formId);
             return;
         }
 
-        BSTArray<FormID>*  scriptAddedTempForms = DroppedLootList->scriptAddedTempForms;
-        if (scriptAddedTempForms->empty()) return;
+        bool cleaned = false;
 
-        // Debug output for the DroppedLootList
-        SKSE::log::info("DroppedLootList has {} script added forms", DroppedLootList->scriptAddedFormCount);
-        std::uint32_t debugi = 0;
-        std::uint32_t debugcount = scriptAddedTempForms->size();
-        for (debugi = 0; debugi < debugcount; debugi++) {
-            if (formId == scriptAddedTempForms->operator[](debugi)) {
-                if (!refr) break;
-                SKSE::log::info("Refr FormID {} [0x{:X}] found in scriptAddedTempForms at operator index {}, temp formId is [0x{:X}] in the list", refr->GetName(), formId, debugi, scriptAddedTempForms->operator[](debugi));
+        // Check the ActorSpillageMap for the unloading refr
+        std::uint32_t j = 0;
+        std::uint32_t spillageCount = static_cast<std::uint32_t>(ActorSpillageMap.size());
+        for (j = 0; j < spillageCount; j++) {
+            TESObjectREFRPtr loot = ActorSpillageMap[j].first;
+            if (loot && formId == loot->GetFormID()) {
+                ActorPtr lootActor = ActorSpillageMap[j].second;
+                lootActor->PickUpObject(loot.get(), 1, false, false);
+                
+                ActorSpillageMap.erase(ActorSpillageMap.begin() + j);
+                SKSE::log::info("{} [0x{:X}] Loot placed back on the body of {} [0x{:X}].", loot->GetName(), formId, lootActor->GetName(), lootActor->GetFormID());
+                SKSE::log::info("Remaining  ActorSpillageMap Size: {}", ActorSpillageMap.size());
+                cleaned = true;
                 break;
             }
         }
-        
+
+        BGSListForm* DroppedLootList = Settings::GetDroppedLootList();
+        BSTArray<FormID>*  scriptAddedTempForms = DroppedLootList->scriptAddedTempForms;
+
+        // If loot is in DroppedLootList but wasn't Continue with cleanup using the DropLootList
+        if (!DroppedLootList->HasForm(formId) || scriptAddedTempForms->empty()) {
+            return;
+        }
+
+        bool foundInList = false;
+
         // Release from the DroppedLootList to free up memory and prevent larger loops when checking HasForm
         std::uint32_t i = 0;
         std::uint32_t count = scriptAddedTempForms->size();
         for (i = 0; i < count; i++) {
             if (formId == scriptAddedTempForms->operator[](i)) {
-                if (!refr) break;
                 scriptAddedTempForms->erase(scriptAddedTempForms->data() + i);
                 SKSE::log::info("Removed Form {} [0x{:X}] from SpilledLootList", refr->GetName(), formId);
+                foundInList = true;
                 break;
             }
         }
+
+        // if the item was already cleaned using local memory, skip the rest
+        if (cleaned || !foundInList) return;
 
         auto* baseObject = refr->GetBaseObject();
         if (!baseObject) {
@@ -168,6 +182,7 @@ namespace LootSpillage
             return;
         }
 
+        // Do not clean anything that's not a consumable, armor, weapon, or valuable
         switch(baseObject->GetFormType())
         {
             case FormType::AlchemyItem:
@@ -202,7 +217,5 @@ namespace LootSpillage
         
         if (!refr) return;
         garbageMan->RemoveItem(refr.get()->GetObjectReference(), lootCount, ITEM_REMOVE_REASON::kStoreInContainer, nullptr, cleanUpContainer);
-
-        // @TODO figure out how to place loot back on actor
     }
 }

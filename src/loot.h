@@ -19,17 +19,16 @@ namespace LootSpillage
 
                 static void CleanUpLoot(NiPointer<TESObjectREFR> refr);
 
-            private:
-
-                static bool CanDrop(TESBoundObject* loot);
-
-                static void DropLoot(Actor *actor, TESBoundObject *loot, const std::pair<int32_t, std::unique_ptr<InventoryEntryData>> &inventoryData);
-            
-            static inline TESFaction* CreatureFaction;
-            static inline BGSKeyword* DisableLootDropKYWD;
-
         private:
 
-            static inline std::vector<std::pair<Actor*, std::vector<NiPointer<TESObjectREFR>>>> ActorLootSpillage;
+            static bool CanDrop(TESBoundObject* loot);
+
+            static void DropLoot(Actor *actor, TESBoundObject *loot, const std::pair<int32_t, std::unique_ptr<InventoryEntryData>> &inventoryData);
+            
+            static inline TESFaction* CreatureFaction;
+            
+            static inline BGSKeyword* DisableLootDropKYWD;
+            
+            [[nodiscard]] static inline std::vector<std::pair<NiPointer<TESObjectREFR>, NiPointer<Actor>>> ActorSpillageMap;
     };
 }
